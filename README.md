@@ -2,7 +2,7 @@
 
 A premium, fully responsive luxury kitchen design and remodeling portfolio website built with Python (Flask) and Bootstrap 5. Crafted with professional-grade glassmorphism aesthetics, fluid scrolling animations, and a powerful dynamic backend.
 
-## ✨ Features
+## Features
 
 - **Professional Luxury Aesthetics:** Deep navy and gold accents with sophisticated glassmorphism layering.
 - **Dynamic Scroll Animations:** Integrated AOS (Animate on Scroll) for breathtaking reveals.
@@ -11,7 +11,7 @@ A premium, fully responsive luxury kitchen design and remodeling portfolio websi
 - **Dynamic Portfolio Routing:** High-performance database routing for individual project galleries and details.
 - **Lead Generation:** Integrated contact modal and email capability via secure environment variables.
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 Iconic Design/
@@ -29,7 +29,7 @@ Iconic Design/
     └── admin.html                  # Dashboard for lead and project management
 ```
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 - Python 3.8+
@@ -68,14 +68,14 @@ Iconic Design/
 6. **View the site:**
    Open your browser and navigate to `http://localhost:5001`.
 
-## 🛠 Technology Stack
+## Technology Stack
 
 - **Frontend:** HTML5, CSS3 (Glassmorphism), Bootstrap 5, FontAwesome, AOS Animation Library
 - **Backend:** Python 3, Flask Web Framework
 - **Database:** SQLite (Production ready via automated schema generation)
 - **Deployment Ready:** Configured for DigitalOcean VPS / Gunicorn
 
-## 🔐 Security & Best Practices
+## Security & Best Practices
 - **Production Ignored Files:** The `.gitignore` protects sensitive data, preventing `.db` files, user-uploaded `/static/uploads`, and `.env` credentials from reaching public version control.
 - **Dynamic Database Initialization:** The application detects fresh deployments and automatically scaffolds the `.db` schema without leaking development data.
 - **Password Protection:** Admin routes are secured behind session-based authentication.
