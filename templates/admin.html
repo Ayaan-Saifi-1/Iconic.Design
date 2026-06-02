@@ -1,0 +1,278 @@
+{% extends "base.html" %}
+
+{% block content %}
+</div> <!-- End main container temporarily to make full-width header -->
+
+<!-- Premium Admin Header -->
+<div style="background: linear-gradient(135deg, #0f1e3c 0%, #050b1a 100%); padding-top: 5rem; padding-bottom: 0;">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="text-white mb-0" style="font-weight: 700; letter-spacing: -0.5px;">
+                <i class="fas fa-shield-alt" style="color: #d4af37; margin-right: 10px;"></i>Admin Workspace
+            </h2>
+            <a href="{{ url_for('admin_logout') }}" class="btn btn-sm shadow-sm" style="background-color: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; transition: all 0.3s;" onmouseover="this.style.backgroundColor='rgba(220, 53, 69, 0.9)'; this.style.borderColor='rgba(220, 53, 69, 0.9)'" onmouseout="this.style.backgroundColor='rgba(255,255,255,0.1)'; this.style.borderColor='rgba(255,255,255,0.2)'">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+        
+        <!-- Premium Tabs -->
+        <ul class="nav d-flex gap-4" style="border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: -1px;">
+            <li class="nav-item">
+                <a href="{{ url_for('admin_dashboard') }}" class="nav-link px-0 py-3 text-white" style="font-weight: 600; border-bottom: 3px solid #d4af37; transition: all 0.2s;">
+                    <i class="fas fa-layer-group me-2"></i>Manage Projects
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ url_for('admin_leads') }}" class="nav-link px-0 py-3" style="color: #94a3b8; font-weight: 500; border-bottom: 3px solid transparent; transition: all 0.2s;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#94a3b8'">
+                    <i class="fas fa-inbox me-2"></i>Contact Inquiries
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="container" style="padding: 3rem 0; margin-bottom: 4rem;">
+    <div class="row">
+        <!-- Add New Project Form -->
+        <div class="col-lg-7">
+            <div class="card shadow-sm border-0 mb-4" style="border-radius: 12px; border-top: 4px solid #d4af37 !important;">
+                <div class="card-body p-4">
+                    <h4 class="mb-4" style="color: #0f1e3c;"><i class="fas fa-plus-circle text-primary"></i> Add New Project</h4>
+                    <form method="POST" action="{{ url_for('admin_dashboard') }}" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Project Title</label>
+                                <input type="text" name="title" class="form-control" required placeholder="e.g. Skyline Towers Phase 1">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Location</label>
+                                <input type="text" name="location" class="form-control" required placeholder="e.g. South Delhi">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Completion Date</label>
+                                <input type="date" name="date" class="form-control" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Status</label>
+                                <select name="status" class="form-select" required>
+                                    <option value="Completed">Completed</option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Planning">Planning</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold">Budget</label>
+                                <input type="text" name="budget" class="form-control" required placeholder="e.g. ₹50 Crores">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold">Team Size</label>
+                                <input type="text" name="team_size" class="form-control" required placeholder="e.g. 150 Professionals">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold">Duration</label>
+                                <input type="text" name="duration" class="form-control" required placeholder="e.g. 24 Months">
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Short Description (For Homepage & Cards)</label>
+                            <textarea name="description" class="form-control" rows="2" required placeholder="Brief 1-2 sentence description..."></textarea>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Extended Overview (Optional)</label>
+                            <textarea name="extended_description" class="form-control" rows="4" placeholder="Detailed overview paragraph shown on the project detail page..."></textarea>
+                            <div class="form-text mt-1 text-muted">Leave blank to hide the extended overview paragraph.</div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Scope of Work Heading</label>
+                            <input type="text" name="scope_heading" class="form-control mb-2" placeholder="e.g. Scope of Work" value="Scope of Work">
+                            <label class="form-label fw-bold">Scope of Work Points</label>
+                            <textarea name="scope_of_work" class="form-control" rows="5" placeholder="Enter each point on a new line..."></textarea>
+                            <div class="form-text mt-1 text-muted">Each new line will be converted into a beautiful bullet point automatically.</div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Achievements Heading</label>
+                            <input type="text" name="achievements_heading" class="form-control mb-2" placeholder="e.g. Achievements & Certifications" value="Achievements & Certifications">
+                            <label class="form-label fw-bold">Achievements Subheading</label>
+                            <input type="text" name="achievements_subheading" class="form-control mb-2" placeholder="e.g. This project received recognition for:" value="This project received recognition for:">
+                            <label class="form-label fw-bold">Achievements & Certifications (Optional)</label>
+                            <textarea name="achievements" class="form-control" rows="4" placeholder="Enter each achievement on a new line..."></textarea>
+                            <div class="form-text mt-1 text-muted">Leave completely blank to hide the Achievements section on the live page.</div>
+                        </div>
+
+                        <div class="mb-4 p-4 bg-light rounded" style="border: 2px dashed #cbd5e1;">
+                            <label class="form-label fw-bold"><i class="fas fa-image text-primary"></i> Main Cover Image</label>
+                            <input type="file" name="cover_image" class="form-control" accept="image/*">
+                        </div>
+
+                        <div class="mb-4 p-4 bg-light rounded" style="border: 2px dashed #cbd5e1;">
+                            <label class="form-label fw-bold"><i class="fas fa-images text-primary"></i> Extra Gallery Images</label>
+                            <input type="file" name="gallery_images" class="form-control" accept="image/*" multiple>
+                        </div>
+
+                        <button type="submit" class="btn w-100 py-3 fw-bold shadow-sm" style="background: linear-gradient(135deg, #0f1e3c 0%, #1e40af 100%); color: white; border: none; font-size: 1.15rem; border-radius: 8px;">
+                            <i class="fas fa-cloud-upload-alt"></i> Upload Project
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Projects List with Pagination & Edit/Delete -->
+        <div class="col-lg-5">
+            <div class="card shadow-sm border-0" style="border-radius: 12px; overflow: hidden;">
+                <div class="card-header bg-white py-4 border-bottom d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0" style="color: #0f1e3c; font-weight: 700;"><i class="fas fa-list text-primary"></i> Manage Projects</h5>
+                </div>
+                <div class="card-body p-0">
+                    <ul class="list-group list-group-flush">
+                        {% for p in projects %}
+                        <li class="list-group-item py-3 px-4">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div>
+                                    <h6 class="mb-1" style="color: #0f1e3c; font-weight: 600; font-size: 1rem;">{{ p.title }}</h6>
+                                    <small class="text-muted" style="font-size: 0.8rem;"><i class="fas fa-calendar-alt"></i> {{ p.date }}</small>
+                                </div>
+                                <span class="badge text-dark border" style="background: #f8f9fa;">ID: {{ p.id }}</span>
+                            </div>
+                            <div class="d-flex justify-content-end gap-2 mt-2 align-items-center">
+                                <div class="form-check form-switch me-auto">
+                                    <input class="form-check-input feature-toggle" type="checkbox" role="switch" id="featureSwitch{{ p.id }}" data-id="{{ p.id }}" {% if p.is_featured %}checked{% endif %} style="cursor: pointer;">
+                                    <label class="form-check-label" for="featureSwitch{{ p.id }}" style="font-size: 0.85rem; color: #64748b; cursor: pointer;">
+                                        <i class="fas fa-star text-warning"></i> Feature on Homepage
+                                    </label>
+                                </div>
+                                <a href="{{ url_for('admin_edit_project', project_id=p.id) }}" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-edit"></i> Edit
+                                </a>
+                                <form action="{{ url_for('admin_delete_project', project_id=p.id) }}" method="POST" onsubmit="return confirm('Are you sure you want to permanently delete this project?');" style="display:inline;">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                        <i class="fas fa-trash-alt"></i> Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </li>
+                        {% else %}
+                        <li class="list-group-item py-4 text-center text-muted">
+                            No projects found.
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                
+                <!-- Admin Pagination -->
+                {% if total_pages > 1 %}
+                <div class="card-footer bg-white border-top py-3">
+                    <nav>
+                        <ul class="pagination pagination-sm justify-content-center mb-0" style="flex-wrap: wrap; gap: 0.25rem;">
+                            <li class="page-item {% if current_page == 1 %}disabled{% endif %}">
+                                <a class="page-link" href="{{ url_for('admin_dashboard', page=current_page-1) }}"><i class="fas fa-chevron-left"></i></a>
+                            </li>
+                            
+                            {% for p in range(1, total_pages + 1) %}
+                                {% if p == 1 or p == total_pages or (p >= current_page - 2 and p <= current_page + 2) %}
+                                    <li class="page-item {% if p == current_page %}active{% endif %}">
+                                        <a class="page-link" href="{{ url_for('admin_dashboard', page=p) }}">{{ p }}</a>
+                                    </li>
+                                {% elif p == current_page - 3 or p == current_page + 3 %}
+                                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                                {% endif %}
+                            {% endfor %}
+                            
+                            <li class="page-item {% if current_page == total_pages %}disabled{% endif %}">
+                                <a class="page-link" href="{{ url_for('admin_dashboard', page=current_page+1) }}"><i class="fas fa-chevron-right"></i></a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Change Password Card -->
+            <div class="card shadow-sm border-0 mt-4" style="border-radius: 12px; overflow: hidden;">
+                <div class="card-header bg-white py-4 border-bottom">
+                    <h5 class="mb-0" style="color: #0f1e3c; font-weight: 700;"><i class="fas fa-key text-primary"></i> Change Admin Password</h5>
+                </div>
+                <div class="card-body p-4">
+                    <form action="{{ url_for('admin_password') }}" method="POST">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">New Password</label>
+                            <input type="password" name="new_password" class="form-control" required minlength="6" placeholder="At least 6 characters">
+                        </div>
+                        <button type="submit" class="btn btn-outline-primary w-100"><i class="fas fa-save"></i> Update Password</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast Notification -->
+<div id="featureToast" style="position: fixed; bottom: 2rem; right: 2rem; z-index: 9999; display: none; min-width: 300px;">
+    <div id="featureToastBody" class="d-flex align-items-center gap-3 shadow-lg p-3 rounded-3 text-white" style="background: #1e293b; font-weight: 500; font-size: 0.9rem;">
+        <i id="featureToastIcon" class="fas fa-check-circle text-success fa-lg"></i>
+        <span id="featureToastMsg">Done!</span>
+    </div>
+</div>
+
+<script>
+function showToast(message, isError) {
+    const toast = document.getElementById('featureToast');
+    const icon = document.getElementById('featureToastIcon');
+    const msg = document.getElementById('featureToastMsg');
+    
+    icon.className = isError ? 'fas fa-exclamation-triangle text-warning fa-lg' : 'fas fa-check-circle text-success fa-lg';
+    msg.textContent = message;
+    toast.style.display = 'block';
+    
+    setTimeout(() => { toast.style.display = 'none'; }, 4000);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toggles = document.querySelectorAll('.feature-toggle');
+    toggles.forEach(toggle => {
+        toggle.addEventListener('change', function() {
+            const projectId = this.getAttribute('data-id');
+            const isChecked = this.checked;
+            const self = this;
+            
+            fetch(`/admin/toggle_feature/${projectId}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast(
+                        isChecked ? '⭐ Project is now featured on the homepage!' : 'Project removed from homepage.',
+                        false
+                    );
+                } else if (data.limit_reached) {
+                    self.checked = false; // Revert the toggle
+                    showToast('⚠️ Max 6 featured projects! Remove one first.', true);
+                } else {
+                    self.checked = !isChecked;
+                    showToast('Error: ' + (data.error || 'Unknown error'), true);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                self.checked = !isChecked;
+                showToast('Network error — please try again.', true);
+            });
+        });
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,19 @@
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Uploaded images
+static/uploads/*
+!static/uploads/.gitkeep
+
+# Environment variables
+.env
+
+# Python specific
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+.pytest_cache/

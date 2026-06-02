@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container" style="padding: 4rem 0; margin-top: 4rem; margin-bottom: 4rem;">
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
+        <h2><i class="fas fa-edit text-primary"></i> Edit Project: {{ project.title }}</h2>
+        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-secondary"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+    </div>
+
+
+
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow-sm border-0 mb-4" style="border-radius: 12px; border-top: 4px solid #d4af37 !important;">
+                <div class="card-body p-4 p-md-5">
+                    <form method="POST" action="{{ url_for('admin_edit_project', project_id=project.id) }}" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Project Title</label>
+                                <input type="text" name="title" class="form-control" required value="{{ project.title }}">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Location</label>
+                                <input type="text" name="location" class="form-control" required value="{{ project.location }}">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Completion Date</label>
+                                <input type="date" name="date" class="form-control" required value="{{ project.date }}">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Status</label>
+                                <select name="status" class="form-select" required>
+                                    <option value="Completed" {% if project.status == 'Completed' %}selected{% endif %}>Completed</option>
+                                    <option value="In Progress" {% if project.status == 'In Progress' %}selected{% endif %}>In Progress</option>
+                                    <option value="Planning" {% if project.status == 'Planning' %}selected{% endif %}>Planning</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold">Budget</label>
+                                <input type="text" name="budget" class="form-control" required value="{{ project.budget }}">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold">Team Size</label>
+                                <input type="text" name="team_size" class="form-control" required value="{{ project.team_size }}">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold">Duration</label>
+                                <input type="text" name="duration" class="form-control" required value="{{ project.duration }}">
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Short Description (For Homepage & Cards)</label>
+                            <textarea name="description" class="form-control" rows="2" required>{{ project.description }}</textarea>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Extended Overview (Optional)</label>
+                            <textarea name="extended_description" class="form-control" rows="4" placeholder="Detailed overview paragraph shown on the project detail page...">{{ project.extended_description }}</textarea>
+                            <div class="form-text mt-1 text-muted">Leave blank to hide the extended overview paragraph.</div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Scope of Work Heading</label>
+                            <input type="text" name="scope_heading" class="form-control mb-2" value="{{ project.scope_heading or 'Scope of Work' }}">
+                            <label class="form-label fw-bold">Scope of Work Points</label>
+                            <textarea name="scope_of_work" class="form-control" rows="5" placeholder="Enter each point on a new line...">{{ project.scope_of_work }}</textarea>
+                            <div class="form-text mt-1 text-muted">Each new line will be converted into a beautiful bullet point automatically.</div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Achievements Heading</label>
+                            <input type="text" name="achievements_heading" class="form-control mb-2" value="{{ project.achievements_heading or 'Achievements & Certifications' }}">
+                            <label class="form-label fw-bold">Achievements Subheading</label>
+                            <input type="text" name="achievements_subheading" class="form-control mb-2" value="{{ project.achievements_subheading or 'This project received recognition for:' }}">
+                            <label class="form-label fw-bold">Achievements & Certifications (Optional)</label>
+                            <textarea name="achievements" class="form-control" rows="4" placeholder="Enter each achievement on a new line...">{{ project.achievements }}</textarea>
+                            <div class="form-text mt-1 text-muted">Leave completely blank to hide the Achievements section on the live page.</div>
+                        </div>
+
+                        <div class="mb-4 p-4 bg-light rounded" style="border: 2px dashed #cbd5e1;">
+                            <label class="form-label fw-bold"><i class="fas fa-image text-primary"></i> Main Cover Image (Leave blank to keep existing)</label>
+                            <div class="mb-2">
+                                <img src="{{ project.cover_image }}" style="height: 60px; border-radius: 4px; object-fit: cover;">
+                            </div>
+                            <input type="file" name="cover_image" class="form-control" accept="image/*">
+                        </div>
+
+                        <div class="mb-4 p-4 bg-light rounded" style="border: 2px dashed #cbd5e1;">
+                            <label class="form-label fw-bold"><i class="fas fa-images text-primary"></i> Manage Existing Gallery Images</label>
+                            <div class="d-flex flex-wrap gap-3 mb-3">
+                                {% for img in gallery_images %}
+                                <div class="position-relative">
+                                    <img src="{{ img.image_path }}" style="height: 100px; border-radius: 4px; object-fit: cover;">
+                                    <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1" onclick="if(confirm('Are you sure you want to delete this image?')) { document.getElementById('delete-img-{{ img.id }}').submit(); }">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <label class="form-label fw-bold"><i class="fas fa-plus text-primary"></i> Append Extra Gallery Images</label>
+                            <input type="file" name="gallery_images" class="form-control" accept="image/*" multiple>
+                            <div class="form-text mt-1 text-muted">These will be ADDED to the existing gallery.</div>
+                        </div>
+
+                        <button type="submit" class="btn w-100 py-3 fw-bold shadow-sm" style="background: linear-gradient(135deg, #0f1e3c 0%, #1e40af 100%); color: white; border: none; font-size: 1.15rem; border-radius: 8px;">
+                            <i class="fas fa-save"></i> Save Changes
+                        </button>
+                    </form>
+
+                    {% for img in gallery_images %}
+                    <form id="delete-img-{{ img.id }}" action="{{ url_for('admin_delete_image', image_id=img.id) }}" method="POST" style="display: none;"></form>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
