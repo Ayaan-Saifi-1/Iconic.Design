@@ -1,19 +1,73 @@
-# Database files
+# ============================================================
+# Iconic Design — .gitignore
+# ============================================================
+
+# --- Database files (use separate DB in production) ---
 *.db
 *.sqlite
 *.sqlite3
 
-# Uploaded images
+# --- Uploaded media (managed on server, not in repo) ---
 static/uploads/*
 !static/uploads/.gitkeep
 
-# Environment variables
+# --- Environment & secrets ---
 .env
 
-# Python specific
+# --- Python ---
 __pycache__/
 *.py[cod]
 *$py.class
+*.pyo
+*.pyd
+
+# --- Virtual environment ---
 venv/
 env/
+.venv/
+.env/
+
+# --- Testing & dev artifacts (not for production) ---
+*.test.py
+test_*.py
+*_test.py
+advanced_test.py
+comprehensive_test.py
+edge_case_test.py
+scratch_process.py
+check_db.py
+test_report.txt
+
+# --- Temporary / scratch files ---
+index_diff.txt
+*.diff
+*.patch
+
+# --- Internal planning docs (kept local only) ---
+TESTING_REPORT.md
+TESTING_SUMMARY.md
+INDIAN_VPS_LAUNCH_PLAN.md
+client_requirements.md
+implementation_plan.md
+
+# --- Bot (unrelated trading bot code) ---
+bot/
+main.py
+
+# --- IDE & OS files ---
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# --- Pytest ---
 .pytest_cache/
+htmlcov/
+.coverage
+
+# --- Build artifacts ---
+dist/
+build/
+*.egg-info/

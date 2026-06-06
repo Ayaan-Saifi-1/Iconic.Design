@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-</div> <!-- End main container temporarily to make full-width header -->
 
 <!-- Premium Admin Header -->
 <div style="background: linear-gradient(135deg, #0f1e3c 0%, #050b1a 100%); padding-top: 5rem; padding-bottom: 0;">
@@ -15,16 +14,34 @@
             </a>
         </div>
         
-        <!-- Premium Tabs -->
-        <ul class="nav d-flex gap-4" style="border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: -1px;">
-            <li class="nav-item">
-                <a href="{{ url_for('admin_dashboard') }}" class="nav-link px-0 py-3" style="color: #94a3b8; font-weight: 500; border-bottom: 3px solid transparent; transition: all 0.2s;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#94a3b8'">
+        <!-- Nav Tabs -->
+        <ul class="nav d-flex flex-nowrap overflow-auto gap-3 gap-md-4 pb-0"
+            style="border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: -1px; scrollbar-width: none;">
+            <li class="nav-item flex-shrink-0">
+                <a href="{{ url_for('admin_dashboard') }}" class="nav-link px-0 py-3"
+                   style="color:#94a3b8; font-weight:500; border-bottom:3px solid transparent; white-space:nowrap;"
+                   onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#94a3b8'">
                     <i class="fas fa-layer-group me-2"></i>Manage Projects
                 </a>
             </li>
-            <li class="nav-item">
-                <a href="{{ url_for('admin_leads') }}" class="nav-link px-0 py-3 text-white" style="font-weight: 600; border-bottom: 3px solid #d4af37; transition: all 0.2s;">
+            <li class="nav-item flex-shrink-0">
+                <a href="{{ url_for('admin_leads') }}" class="nav-link px-0 py-3 text-white"
+                   style="font-weight:600; border-bottom:3px solid #d4af37; white-space:nowrap;">
                     <i class="fas fa-inbox me-2"></i>Contact Inquiries
+                </a>
+            </li>
+            <li class="nav-item flex-shrink-0">
+                <a href="{{ url_for('admin_testimonials') }}" class="nav-link px-0 py-3"
+                   style="color:#94a3b8; font-weight:500; border-bottom:3px solid transparent; white-space:nowrap;"
+                   onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#94a3b8'">
+                    <i class="fas fa-quote-left me-2"></i>Testimonials
+                </a>
+            </li>
+            <li class="nav-item flex-shrink-0">
+                <a href="{{ url_for('admin_settings') }}" class="nav-link px-0 py-3"
+                   style="color:#94a3b8; font-weight:500; border-bottom:3px solid transparent; white-space:nowrap;"
+                   onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#94a3b8'">
+                    <i class="fas fa-sliders-h me-2"></i>Site Settings
                 </a>
             </li>
         </ul>

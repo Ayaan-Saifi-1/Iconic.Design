@@ -1,7 +1,7 @@
 """
-BuildCorp Construction Portfolio Backend
+Iconic Design Portfolio Backend
 ==========================================
-This is the main Flask application for the BuildCorp construction portfolio website.
+This is the main Flask application for the Iconic Design interior design portfolio website.
 """
 
 import os
@@ -61,13 +61,55 @@ def process_and_save_image(file_obj, upload_folder, max_dim=2560):
         file_obj.save(save_path)
         return f"/static/uploads/{filename}"
 
+
+def process_and_crop_image(file_obj, upload_folder, aspect_ratio=(4, 5), target_width=800):
+    if not file_obj or not file_obj.filename:
+        return None
+        
+    filename = secure_filename(file_obj.filename)
+    unique_filename = f"{uuid.uuid4().hex}"
+    
+    try:
+        img = Image.open(file_obj)
+        if img.mode in ('RGBA', 'P'):
+            img = img.convert('RGB')
+            
+        width, height = img.size
+        target_aspect = aspect_ratio[0] / aspect_ratio[1]
+        img_aspect = width / height
+        
+        if img_aspect > target_aspect:
+            # Image is too wide -> crop left and right
+            new_width = int(height * target_aspect)
+            offset = (width - new_width) // 2
+            img = img.crop((offset, 0, offset + new_width, height))
+        else:
+            # Image is too tall -> crop top and bottom (bias vertical crop slightly towards top)
+            new_height = int(width / target_aspect)
+            offset = int((height - new_height) * 0.35)
+            img = img.crop((0, offset, width, offset + new_height))
+            
+        target_height = int(target_width / target_aspect)
+        img = img.resize((target_width, target_height), Image.Resampling.LANCZOS)
+        
+        final_filename = f"{unique_filename}.webp"
+        save_path = os.path.join(upload_folder, final_filename)
+        img.save(save_path, 'WEBP', quality=90)
+        return f"/static/uploads/{final_filename}"
+    except Exception as e:
+        print(f"Image cropping and processing failed: {e}")
+        save_path = os.path.join(upload_folder, filename)
+        file_obj.seek(0)
+        file_obj.save(save_path)
+        return f"/static/uploads/{filename}"
+
 from flask_compress import Compress
 from flask_caching import Cache
 
 app = Flask(__name__)
 # SECRET KEY: In production, set the SECRET_KEY environment variable on your hosting platform.
 # Never commit a real secret key to a public repository.
-app.secret_key = os.environ.get('SECRET_KEY', 'buildcorp_local_dev_key_change_in_production')
+app.secret_key = os.environ.get('SECRET_KEY', 'iconic_design_local_dev_key_change_in_production')
 
 # Initialize Compression
 compress = Compress()
@@ -78,7 +120,9 @@ cache = Cache(config={'CACHE_TYPE': 'SimpleCache', 'CACHE_DEFAULT_TIMEOUT': 300}
 cache.init_app(app)
 # --- CONFIGURATION ---
 PROJECTS_PER_PAGE = 9
-DATABASE = 'buildcorp.db'
+# DATABASE_PATH env var lets you point prod to a persistent volume path;
+# locally it just defaults to buildcorp.db in the project root.
+DATABASE = os.environ.get('DATABASE_PATH', 'buildcorp.db')
 UPLOAD_FOLDER = os.path.join('static', 'uploads')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -175,6 +219,32 @@ def init_db():
         )
     ''')
     
+    # Create testimonials table
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS testimonials (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            role TEXT NOT NULL,
+            text TEXT NOT NULL,
+            stars INTEGER DEFAULT 5,
+            sort_order INTEGER DEFAULT 0,
+            is_active INTEGER DEFAULT 1
+        )
+    ''')
+    
+    # Seed testimonials if empty
+    testimonial_count = cursor.execute('SELECT COUNT(*) FROM testimonials').fetchone()[0]
+    if testimonial_count == 0:
+        seed_testimonials = [
+            ('Rajesh Kumar', 'Homeowner, Mumbai', 'Iconic Design exceeded our expectations. Our newly designed living room is the absolute centerpiece of our home!', 5, 1),
+            ('Priya Sharma', 'Homeowner & Interior Enthusiast', 'Their attention to detail and spatial planning makes living in our home an absolute joy every single day.', 5, 2),
+            ('Vikram Patel', 'Architectural Consultant', 'Exceptional material quality and transparent communication. The transformation was seamless and utterly perfect.', 5, 3),
+        ]
+        cursor.executemany(
+            'INSERT INTO testimonials (name, role, text, stars, sort_order) VALUES (?, ?, ?, ?, ?)',
+            seed_testimonials
+        )
+    
     # Create settings table for dynamic admin password
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS settings (
@@ -182,7 +252,32 @@ def init_db():
             value TEXT NOT NULL
         )
     ''')
-    cursor.execute('INSERT OR IGNORE INTO settings (key, value) VALUES (?, ?)', ('admin_password', 'buildcorp123'))
+    cursor.execute('INSERT OR IGNORE INTO settings (key, value) VALUES (?, ?)', ('admin_password', 'iconic@admin'))
+    
+    # Seed homepage stats & founder settings
+    default_stats = [
+        ('stat1_value', '100+'), ('stat1_label', 'Projects Delivered'),
+        ('stat2_value', '25'),   ('stat2_label', 'Years of Mastery'),
+        ('stat3_value', '50+'),  ('stat3_label', 'Expert Designers'),
+        ('stat4_value', '99%'),  ('stat4_label', 'Client Satisfaction'),
+        ('founder_name', 'Shakir Ali'),
+        ('founder_title', 'Founder'),
+        ('founder_phone', '+91 98116 85628'),
+        ('founder_email', 'shakirali1203@gmail.com'),
+        ('founder_location', 'Sector 56, Gurgaon'),
+        ('founder_image', '/static/uploads/shakir_ali.png'),
+        ('hero_badge', "India's Premier Interior Designers"),
+        ('hero_title', 'Crafting Iconic Interiors'),
+        ('hero_desc', 'With over 25 years of experience, Iconic Design delivers premium interior design, luxury decoration, and bespoke residential environments tailored to your lifestyle.'),
+        ('about_subtitle', 'Your Trusted Design Partner'),
+        ('about_desc1', 'iconic.design, founded by visionary designer Shakir Ali, stands as a beacon of excellence in the premium interior design and luxury decoration industry. Based in Sector 56, Gurgaon, we specialize in delivering world-class residential transformations, high-end commercial spaces, and custom-tailored environments that elevate your lifestyle.'),
+        ('about_desc2', "Under Shakir Ali's leadership, our team of expert decorators and craftsmen combine aesthetic innovation, spatial ergonomics, and premium material curation. We are committed to turning your residential and commercial visions into reality with immaculate execution and transparent service."),
+        ('about_bullet1', 'Bespoke Furniture & Material Curation'),
+        ('about_bullet2', 'End-to-End Space Planning & Execution'),
+        ('about_bullet3', 'Immaculate Craftsmanship & Finishing'),
+    ]
+    for key, value in default_stats:
+        cursor.execute('INSERT OR IGNORE INTO settings (key, value) VALUES (?, ?)', (key, value))
     
     # Create leads table for contact form inquiries
     cursor.execute('''
@@ -215,13 +310,13 @@ def init_db():
     conn.close()
 
 def seed_db(cursor):
-    project_types = ["Modern Kitchen", "Luxury Island Kitchen", "Classic L-Shape", "U-Shaped Modular", "Custom Cabinetry"]
+    project_types = ["Modern Living Room", "Luxury Villa Interiors", "Bespoke Bedroom Suite", "Contemporary Dining Area", "Custom Interior Styling"]
     locations = ["Mumbai", "Delhi", "Bangalore", "Hyderabad", "Pune"]
-    descriptions = ["A stunning {type} designed with premium materials, smart storage, and seamless aesthetics."]
+    descriptions = ["A stunning {type} designed with premium materials, spatial harmony, and seamless aesthetics."]
     
-    default_scope = "Custom cabinetry and premium countertops\nIntegrated high-end appliances\nErgonomic workflow design\nAdvanced lighting and smart solutions\nPremium hardware and soft-close mechanisms\nComplete installation and finishing"
-    default_achievements = "Premium Quality Materials\nErgonomic Excellence\nSmart Storage Solutions\nImmaculate Finishing"
-    default_extended = "This iconic space was crafted to merge functionality with breathtaking design. Every element, from the custom cabinets to the lighting, was carefully curated to create a truly luxurious environment."
+    default_scope = "Comprehensive space planning and layout\nBespoke furniture selection and sourcing\nCustom lighting design and ambiance\nPremium material finishes and texturing\nArt curation and styling\nComplete installation and staging"
+    default_achievements = "Premium Quality Materials\nSpatial Excellence\nBespoke Furniture Solutions\nImmaculate Styling"
+    default_extended = "This iconic space was crafted to merge luxury with breathtaking design. Every element, from the bespoke furniture to the lighting, was carefully curated to create a truly magnificent environment."
     
     for i in range(1, 101):
         ptype = project_types[i % len(project_types)]
@@ -262,6 +357,17 @@ def seed_db(cursor):
 
 init_db()
 
+@app.context_processor
+def inject_settings():
+    try:
+        conn = get_db_connection()
+        all_settings = conn.execute('SELECT key, value FROM settings').fetchall()
+        conn.close()
+        settings_dict = {row['key']: row['value'] for row in all_settings}
+    except Exception:
+        settings_dict = {}
+    return dict(site_settings=settings_dict)
+
 # --- ROUTES ---
 
 @app.route('/')
@@ -276,12 +382,32 @@ def index():
         'SELECT * FROM projects WHERE is_featured = 1 ORDER BY date DESC'
     ).fetchall()
     
+    testimonials = conn.execute(
+        'SELECT * FROM testimonials WHERE is_active = 1 ORDER BY sort_order ASC'
+    ).fetchall()
+    
+    # Load stats from settings
+    all_settings = conn.execute('SELECT key, value FROM settings').fetchall()
+    settings_dict = {row['key']: row['value'] for row in all_settings}
+    
+    class Stats:
+        stat1_value = settings_dict.get('stat1_value', '100+')
+        stat1_label = settings_dict.get('stat1_label', 'Projects Delivered')
+        stat2_value = settings_dict.get('stat2_value', '25')
+        stat2_label = settings_dict.get('stat2_label', 'Years of Mastery')
+        stat3_value = settings_dict.get('stat3_value', '50+')
+        stat3_label = settings_dict.get('stat3_label', 'Expert Designers')
+        stat4_value = settings_dict.get('stat4_value', '99%')
+        stat4_label = settings_dict.get('stat4_label', 'Client Satisfaction')
+    
     conn.close()
     
     return render_template(
         'index.html',
         projects=projects,
         total_projects=total_projects,
+        testimonials=testimonials,
+        stats=Stats(),
     )
 
 @app.route('/projects')
@@ -348,8 +474,9 @@ def admin_login():
     if request.method == 'POST':
         password = request.form.get('password')
         
-        # Hardcoded master key that cannot be changed
-        MASTER_KEY = 'buildcorp_forgot_password'
+        # Recovery master key — set ADMIN_MASTER_KEY in your server env vars.
+        # Do NOT commit a real key; the fallback here is intentionally weak.
+        MASTER_KEY = os.environ.get('ADMIN_MASTER_KEY', '')
         
         conn = get_db_connection()
         row = conn.execute("SELECT value FROM settings WHERE key = 'admin_password'").fetchone()
@@ -647,7 +774,11 @@ def contact_form():
     try:
         sender_email = os.environ.get('MAIL_USERNAME')
         sender_password = os.environ.get('MAIL_PASSWORD')
-        receiver_email = 'ayaansaifi2005@gmail.com'
+        
+        conn = get_db_connection()
+        row = conn.execute("SELECT value FROM settings WHERE key = 'founder_email'").fetchone()
+        conn.close()
+        receiver_email = row['value'] if row else 'shakirali1203@gmail.com'
         
         if sender_email and sender_password:
             msg = MIMEMultipart()
@@ -682,6 +813,200 @@ Message:
         flash('Your inquiry was saved, but email delivery failed. We will contact you soon.', 'warning')
         
     return redirect(url_for('index', _anchor='contact'))
+
+# ============================================================
+# TESTIMONIALS ADMIN ROUTES
+# ============================================================
+
+@app.route('/admin/testimonials', methods=['GET', 'POST'])
+def admin_testimonials():
+    if not session.get('admin_logged_in'):
+        return redirect(url_for('admin_login'))
+    
+    if request.method == 'POST':
+        name = request.form.get('name', '').strip()
+        role = request.form.get('role', '').strip()
+        text = request.form.get('text', '').strip()
+        stars = int(request.form.get('stars', 5))
+        is_active = 1 if request.form.get('is_active') else 0
+        
+        if name and role and text:
+            conn = get_db_connection()
+            # Place new testimonial at end
+            max_order = conn.execute('SELECT MAX(sort_order) FROM testimonials').fetchone()[0] or 0
+            conn.execute(
+                'INSERT INTO testimonials (name, role, text, stars, sort_order, is_active) VALUES (?, ?, ?, ?, ?, ?)',
+                (name, role, text, stars, max_order + 1, is_active)
+            )
+            conn.commit()
+            conn.close()
+            flash('Testimonial added successfully!', 'success')
+        else:
+            flash('Name, role, and testimonial text are required.', 'error')
+        return redirect(url_for('admin_testimonials'))
+    
+    conn = get_db_connection()
+    testimonials = conn.execute('SELECT * FROM testimonials ORDER BY sort_order ASC').fetchall()
+    conn.close()
+    return render_template('admin_testimonials.html', testimonials=testimonials)
+
+
+@app.route('/admin/testimonials/edit/<int:testimonial_id>', methods=['GET', 'POST'])
+def admin_edit_testimonial(testimonial_id):
+    if not session.get('admin_logged_in'):
+        return redirect(url_for('admin_login'))
+    
+    conn = get_db_connection()
+    
+    if request.method == 'POST':
+        name = request.form.get('name', '').strip()
+        role = request.form.get('role', '').strip()
+        text = request.form.get('text', '').strip()
+        stars = int(request.form.get('stars', 5))
+        is_active = 1 if request.form.get('is_active') else 0
+        
+        if name and role and text:
+            conn.execute(
+                'UPDATE testimonials SET name=?, role=?, text=?, stars=?, is_active=? WHERE id=?',
+                (name, role, text, stars, is_active, testimonial_id)
+            )
+            conn.commit()
+            conn.close()
+            flash('Testimonial updated successfully!', 'success')
+            return redirect(url_for('admin_testimonials'))
+        else:
+            flash('Name, role, and text are required.', 'error')
+    
+    testimonial = conn.execute('SELECT * FROM testimonials WHERE id = ?', (testimonial_id,)).fetchone()
+    conn.close()
+    
+    if testimonial is None:
+        flash('Testimonial not found.', 'error')
+        return redirect(url_for('admin_testimonials'))
+    
+    return render_template('admin_edit_testimonial.html', testimonial=testimonial)
+
+
+@app.route('/admin/testimonials/delete/<int:testimonial_id>', methods=['POST'])
+def admin_delete_testimonial(testimonial_id):
+    if not session.get('admin_logged_in'):
+        return redirect(url_for('admin_login'))
+    
+    conn = get_db_connection()
+    conn.execute('DELETE FROM testimonials WHERE id = ?', (testimonial_id,))
+    conn.commit()
+    conn.close()
+    flash('Testimonial deleted.', 'success')
+    return redirect(url_for('admin_testimonials'))
+
+
+@app.route('/admin/testimonials/reorder', methods=['POST'])
+def admin_reorder_testimonial():
+    if not session.get('admin_logged_in'):
+        return jsonify({'success': False, 'error': 'Unauthorized'}), 401
+    
+    data = request.get_json()
+    testimonial_id = data.get('id')
+    direction = data.get('direction')  # 'up' or 'down'
+    
+    conn = get_db_connection()
+    current = conn.execute('SELECT id, sort_order FROM testimonials WHERE id = ?', (testimonial_id,)).fetchone()
+    
+    if not current:
+        conn.close()
+        return jsonify({'success': False, 'error': 'Not found'}), 404
+    
+    current_order = current['sort_order']
+    
+    if direction == 'up':
+        # Find the testimonial directly above
+        swap_with = conn.execute(
+            'SELECT id, sort_order FROM testimonials WHERE sort_order < ? ORDER BY sort_order DESC LIMIT 1',
+            (current_order,)
+        ).fetchone()
+    else:
+        # Find the testimonial directly below
+        swap_with = conn.execute(
+            'SELECT id, sort_order FROM testimonials WHERE sort_order > ? ORDER BY sort_order ASC LIMIT 1',
+            (current_order,)
+        ).fetchone()
+    
+    if swap_with:
+        # Swap sort_order values
+        conn.execute('UPDATE testimonials SET sort_order = ? WHERE id = ?', (swap_with['sort_order'], current['id']))
+        conn.execute('UPDATE testimonials SET sort_order = ? WHERE id = ?', (current_order, swap_with['id']))
+        conn.commit()
+    
+    conn.close()
+    return jsonify({'success': True})
+
+
+@app.route('/admin/testimonials/toggle/<int:testimonial_id>', methods=['POST'])
+def admin_toggle_testimonial(testimonial_id):
+    if not session.get('admin_logged_in'):
+        return jsonify({'success': False, 'error': 'Unauthorized'}), 401
+    
+    conn = get_db_connection()
+    t = conn.execute('SELECT is_active FROM testimonials WHERE id = ?', (testimonial_id,)).fetchone()
+    if t:
+        new_status = 0 if t['is_active'] else 1
+        conn.execute('UPDATE testimonials SET is_active = ? WHERE id = ?', (new_status, testimonial_id))
+        conn.commit()
+        conn.close()
+        return jsonify({'success': True, 'is_active': new_status})
+    conn.close()
+    return jsonify({'success': False}), 404
+
+
+@app.route('/admin/settings', methods=['GET', 'POST'])
+def admin_settings():
+    if not session.get('admin_logged_in'):
+        return redirect(url_for('admin_login'))
+    
+    conn = get_db_connection()
+    
+    if request.method == 'POST':
+        keys = [
+            'stat1_value', 'stat1_label',
+            'stat2_value', 'stat2_label',
+            'stat3_value', 'stat3_label',
+            'stat4_value', 'stat4_label',
+            'founder_name', 'founder_title',
+            'founder_phone', 'founder_email',
+            'founder_location',
+            'hero_badge', 'hero_title', 'hero_desc',
+            'about_subtitle', 'about_desc1', 'about_desc2',
+            'about_bullet1', 'about_bullet2', 'about_bullet3',
+        ]
+        for key in keys:
+            value = request.form.get(key, '').strip()
+            if value:
+                conn.execute(
+                    'INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)',
+                    (key, value)
+                )
+                
+        # Handle Founder Image Upload
+        founder_image_file = request.files.get('founder_image')
+        if founder_image_file and founder_image_file.filename:
+            processed_path = process_and_crop_image(founder_image_file, app.config['UPLOAD_FOLDER'], aspect_ratio=(4, 5), target_width=800)
+            if processed_path:
+                conn.execute(
+                    'INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)',
+                    ('founder_image', processed_path)
+                )
+                
+        conn.commit()
+        conn.close()
+        flash('Site settings updated successfully!', 'success')
+        return redirect(url_for('admin_settings'))
+    
+    all_settings = conn.execute('SELECT key, value FROM settings').fetchall()
+    conn.close()
+    settings = {row['key']: row['value'] for row in all_settings}
+    return render_template('admin_settings.html', settings=settings)
+
+
 @app.after_request
 def add_cache_headers(response):
     # Cache static assets for 1 year (31536000 seconds) to optimize speed

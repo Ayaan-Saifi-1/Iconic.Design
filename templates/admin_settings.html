@@ -1,0 +1,265 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- Premium Admin Header -->
+<div style="background: linear-gradient(135deg, #0f1e3c 0%, #050b1a 100%); padding-top: 5rem; padding-bottom: 0;">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="text-white mb-0" style="font-weight: 700; letter-spacing: -0.5px;">
+                <i class="fas fa-shield-alt" style="color: #d4af37; margin-right: 10px;"></i>Admin Workspace
+            </h2>
+            <a href="{{ url_for('admin_logout') }}" class="btn btn-sm shadow-sm" style="background-color: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; transition: all 0.3s;" onmouseover="this.style.backgroundColor='rgba(220, 53, 69, 0.9)'; this.style.borderColor='rgba(220, 53, 69, 0.9)'" onmouseout="this.style.backgroundColor='rgba(255,255,255,0.1)'; this.style.borderColor='rgba(255,255,255,0.2)'">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+        <!-- Nav Tabs -->
+        <ul class="nav d-flex flex-nowrap overflow-auto gap-3 gap-md-4 pb-0"
+            style="border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: -1px; scrollbar-width: none;">
+            <li class="nav-item flex-shrink-0">
+                <a href="{{ url_for('admin_dashboard') }}" class="nav-link px-0 py-3"
+                   style="color:#94a3b8; font-weight:500; border-bottom:3px solid transparent; white-space:nowrap;"
+                   onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#94a3b8'">
+                    <i class="fas fa-layer-group me-2"></i>Manage Projects
+                </a>
+            </li>
+            <li class="nav-item flex-shrink-0">
+                <a href="{{ url_for('admin_leads') }}" class="nav-link px-0 py-3"
+                   style="color:#94a3b8; font-weight:500; border-bottom:3px solid transparent; white-space:nowrap;"
+                   onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#94a3b8'">
+                    <i class="fas fa-inbox me-2"></i>Contact Inquiries
+                </a>
+            </li>
+            <li class="nav-item flex-shrink-0">
+                <a href="{{ url_for('admin_testimonials') }}" class="nav-link px-0 py-3"
+                   style="color:#94a3b8; font-weight:500; border-bottom:3px solid transparent; white-space:nowrap;"
+                   onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#94a3b8'">
+                    <i class="fas fa-quote-left me-2"></i>Testimonials
+                </a>
+            </li>
+            <li class="nav-item flex-shrink-0">
+                <a href="{{ url_for('admin_settings') }}" class="nav-link px-0 py-3 text-white"
+                   style="font-weight:600; border-bottom:3px solid #d4af37; white-space:nowrap;">
+                    <i class="fas fa-sliders-h me-2"></i>Site Settings
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="container" style="padding: 3rem 0; margin-bottom: 4rem;">
+    <div class="row g-4 justify-content-center">
+        <!-- Stats Form Card -->
+        <div class="col-lg-7">
+            <div class="card shadow-sm border-0 mb-4" style="border-radius: 12px; border-top: 4px solid #d4af37 !important;">
+                <div class="card-body p-4 p-md-5">
+                    <h4 class="mb-4" style="color: #0f1e3c; font-weight: 700;">
+                        <i class="fas fa-chart-line text-primary me-2"></i>Edit Homepage Stats
+                    </h4>
+                    <p class="text-muted mb-4" style="font-size: 0.9rem;">
+                        Modify the core metrics displayed in the statistics counter strip on the homepage.
+                    </p>
+                    <form method="POST" action="{{ url_for('admin_settings') }}" enctype="multipart/form-data">
+                        
+                        <!-- Stat 1 -->
+                        <div class="p-3 mb-4 rounded-3 bg-light border">
+                            <h6 class="fw-bold mb-3" style="color: #0f1e3c;">Statistic 1</h6>
+                            <div class="row g-3">
+                                <div class="col-sm-4">
+                                    <label class="form-label fw-semibold">Value</label>
+                                    <input type="text" name="stat1_value" class="form-control" value="{{ settings.get('stat1_value', '100+') }}" placeholder="e.g. 100+">
+                                </div>
+                                <div class="col-sm-8">
+                                    <label class="form-label fw-semibold">Label</label>
+                                    <input type="text" name="stat1_label" class="form-control" value="{{ settings.get('stat1_label', 'Projects Delivered') }}" placeholder="e.g. Projects Delivered">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Stat 2 -->
+                        <div class="p-3 mb-4 rounded-3 bg-light border">
+                            <h6 class="fw-bold mb-3" style="color: #0f1e3c;">Statistic 2</h6>
+                            <div class="row g-3">
+                                <div class="col-sm-4">
+                                    <label class="form-label fw-semibold">Value</label>
+                                    <input type="text" name="stat2_value" class="form-control" value="{{ settings.get('stat2_value', '25') }}" placeholder="e.g. 25">
+                                </div>
+                                <div class="col-sm-8">
+                                    <label class="form-label fw-semibold">Label</label>
+                                    <input type="text" name="stat2_label" class="form-control" value="{{ settings.get('stat2_label', 'Years of Mastery') }}" placeholder="e.g. Years of Mastery">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Stat 3 -->
+                        <div class="p-3 mb-4 rounded-3 bg-light border">
+                            <h6 class="fw-bold mb-3" style="color: #0f1e3c;">Statistic 3</h6>
+                            <div class="row g-3">
+                                <div class="col-sm-4">
+                                    <label class="form-label fw-semibold">Value</label>
+                                    <input type="text" name="stat3_value" class="form-control" value="{{ settings.get('stat3_value', '50+') }}" placeholder="e.g. 50+">
+                                </div>
+                                <div class="col-sm-8">
+                                    <label class="form-label fw-semibold">Label</label>
+                                    <input type="text" name="stat3_label" class="form-control" value="{{ settings.get('stat3_label', 'Expert Designers') }}" placeholder="e.g. Expert Designers">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Stat 4 -->
+                        <div class="p-3 mb-4 rounded-3 bg-light border">
+                            <h6 class="fw-bold mb-3" style="color: #0f1e3c;">Statistic 4</h6>
+                            <div class="row g-3">
+                                <div class="col-sm-4">
+                                    <label class="form-label fw-semibold">Value</label>
+                                    <input type="text" name="stat4_value" class="form-control" value="{{ settings.get('stat4_value', '99%') }}" placeholder="e.g. 99%">
+                                </div>
+                                <div class="col-sm-8">
+                                    <label class="form-label fw-semibold">Label</label>
+                                    <input type="text" name="stat4_label" class="form-control" value="{{ settings.get('stat4_label', 'Client Satisfaction') }}" placeholder="e.g. Client Satisfaction">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Founder Settings -->
+                        <h5 class="mt-5 mb-4" style="color: #0f1e3c; font-weight: 700; border-top: 1px solid #e2e8f0; padding-top: 1.5rem;">
+                            <i class="fas fa-user-tie text-primary me-2"></i>Founder Profile & Contact Details
+                        </h5>
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Founder Name</label>
+                            <input type="text" name="founder_name" class="form-control" value="{{ settings.get('founder_name', 'Shakir Ali') }}" placeholder="e.g. Shakir Ali">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Designation / Title</label>
+                            <input type="text" name="founder_title" class="form-control" value="{{ settings.get('founder_title', 'Founder') }}" placeholder="e.g. Founder">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Contact Phone Number</label>
+                            <input type="text" name="founder_phone" class="form-control" value="{{ settings.get('founder_phone', '+91 98116 85628') }}" placeholder="e.g. +91 98116 85628">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Contact Email Address</label>
+                            <input type="email" name="founder_email" class="form-control" value="{{ settings.get('founder_email', 'shakirali1203@gmail.com') }}" placeholder="e.g. shakirali1203@gmail.com">
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Office Location / Address</label>
+                            <input type="text" name="founder_location" class="form-control" value="{{ settings.get('founder_location', 'Sector 56, Gurgaon') }}" placeholder="e.g. Sector 56, Gurgaon">
+                        </div>
+
+                        <div class="mb-4 p-3 bg-light rounded border" style="border: 2px dashed #cbd5e1 !important;">
+                            <label class="form-label fw-semibold d-block"><i class="fas fa-image text-primary me-1"></i> Replace Founder Image</label>
+                            {% if settings.get('founder_image') %}
+                            <div class="mb-3 d-flex align-items-center gap-3">
+                                <img src="{{ settings.get('founder_image') }}" alt="Current Photo" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 1px solid #cbd5e1;">
+                                <span class="text-muted" style="font-size: 0.8rem;">Current Photo: {{ settings.get('founder_image').split('/')[-1] }}</span>
+                            </div>
+                            {% endif %}
+                            <input type="file" name="founder_image" class="form-control" accept="image/*">
+                            <div class="form-text text-muted" style="font-size: 0.78rem; margin-top: 6px;">
+                                <i class="fas fa-info-circle text-primary me-1"></i> Any uploaded image is automatically processed, centered, and cropped to a professional portrait proportion (4:5 aspect ratio) for perfect display and responsiveness across all screens.
+                            </div>
+                        </div>
+
+                        <!-- Hero Banner Settings -->
+                        <h5 class="mt-5 mb-4" style="color: #0f1e3c; font-weight: 700; border-top: 1px solid #e2e8f0; padding-top: 1.5rem;">
+                            <i class="fas fa-home text-primary me-2"></i>Hero Banner Content
+                        </h5>
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Hero Badge Text</label>
+                            <input type="text" name="hero_badge" class="form-control" value="{{ settings.get('hero_badge', "India's Premier Interior Designers") }}" placeholder="e.g. India's Premier Interior Designers">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Hero Headline</label>
+                            <input type="text" name="hero_title" class="form-control" value="{{ settings.get('hero_title', 'Crafting Iconic Interiors') }}" placeholder="e.g. Crafting Iconic Interiors">
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Hero Description Paragraph</label>
+                            <textarea name="hero_desc" class="form-control" rows="3" placeholder="Hero description...">{{ settings.get('hero_desc', 'With over 25 years of experience, Iconic Design delivers premium interior design, luxury decoration, and bespoke residential environments tailored to your lifestyle.') }}</textarea>
+                        </div>
+
+                        <!-- About Page Settings -->
+                        <h5 class="mt-5 mb-4" style="color: #0f1e3c; font-weight: 700; border-top: 1px solid #e2e8f0; padding-top: 1.5rem;">
+                            <i class="fas fa-info-circle text-primary me-2"></i>About Section Content
+                        </h5>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">About Section Subtitle / Badge</label>
+                            <input type="text" name="about_subtitle" class="form-control" value="{{ settings.get('about_subtitle', 'Your Trusted Design Partner') }}" placeholder="e.g. Your Trusted Design Partner">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">About Description Paragraph 1</label>
+                            <textarea name="about_desc1" class="form-control" rows="4" placeholder="First paragraph...">{{ settings.get('about_desc1', 'iconic.design, founded by visionary designer Shakir Ali, stands as a beacon of excellence in the premium interior design and luxury decoration industry. Based in Sector 56, Gurgaon, we specialize in delivering world-class residential transformations, high-end commercial spaces, and custom-tailored environments that elevate your lifestyle.') }}</textarea>
+                            <div class="form-text text-muted" style="font-size: 0.78rem; margin-top: 4px;">
+                                <i class="fas fa-lightbulb text-warning me-1"></i> You can type <strong>iconic.design</strong> anywhere in the text to automatically render it as the stylized cursive brand signature.
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">About Description Paragraph 2</label>
+                            <textarea name="about_desc2" class="form-control" rows="4" placeholder="Second paragraph...">{{ settings.get('about_desc2', "Under Shakir Ali's leadership, our team of expert decorators and craftsmen combine aesthetic innovation, spatial ergonomics, and premium material curation. We are committed to turning your residential and commercial visions into reality with immaculate execution and transparent service.") }}</textarea>
+                        </div>
+
+                        <div class="p-3 mb-4 rounded-3 bg-light border">
+                            <h6 class="fw-bold mb-3" style="color: #0f1e3c;"><i class="fas fa-list-ul me-1"></i> Highlights & Key Pillars</h6>
+                            
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Highlight 1</label>
+                                <input type="text" name="about_bullet1" class="form-control" value="{{ settings.get('about_bullet1', 'Bespoke Furniture & Material Curation') }}" placeholder="e.g. Bespoke Furniture & Material Curation">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Highlight 2</label>
+                                <input type="text" name="about_bullet2" class="form-control" value="{{ settings.get('about_bullet2', 'End-to-End Space Planning & Execution') }}" placeholder="e.g. End-to-End Space Planning & Execution">
+                            </div>
+
+                            <div class="mb-0">
+                                <label class="form-label fw-semibold">Highlight 3</label>
+                                <input type="text" name="about_bullet3" class="form-control" value="{{ settings.get('about_bullet3', 'Immaculate Craftsmanship & Finishing') }}" placeholder="e.g. Immaculate Craftsmanship & Finishing">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn w-100 py-3 fw-bold shadow-sm" style="background: linear-gradient(135deg, #0f1e3c 0%, #1e40af 100%); color: white; border: none; font-size: 1.05rem; border-radius: 8px;">
+                            <i class="fas fa-save me-1"></i> Save Workspace Settings
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Security / Password Card -->
+        <div class="col-lg-5">
+            <div class="card shadow-sm border-0 mb-4" style="border-radius: 12px; border-top: 4px solid #dc3545 !important;">
+                <div class="card-body p-4 p-md-5">
+                    <h4 class="mb-4" style="color: #0f1e3c; font-weight: 700;">
+                        <i class="fas fa-lock text-danger me-2"></i>Change Password
+                    </h4>
+                    <p class="text-muted mb-4" style="font-size: 0.9rem;">
+                        Update the administrator password. Make sure it is secure and easy to remember.
+                    </p>
+                    <form method="POST" action="{{ url_for('admin_password') }}">
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">New Password</label>
+                            <input type="password" name="new_password" class="form-control" required minlength="6" placeholder="At least 6 characters">
+                            <div class="form-text text-muted mt-1">Changing the password will update it in the settings. Make sure to note down the new password.</div>
+                        </div>
+
+                        <button type="submit" class="btn btn-danger w-100 py-3 fw-bold shadow-sm" style="border-radius: 8px; font-size: 1.05rem;">
+                            <i class="fas fa-key me-1"></i> Update Admin Password
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

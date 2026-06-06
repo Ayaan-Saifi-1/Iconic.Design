@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- Premium Admin Header -->
+<div style="background: linear-gradient(135deg, #0f1e3c 0%, #050b1a 100%); padding-top: 5rem; padding-bottom: 0;">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="text-white mb-0" style="font-weight: 700; letter-spacing: -0.5px;">
+                <i class="fas fa-shield-alt" style="color: #d4af37; margin-right: 10px;"></i>Admin Workspace
+            </h2>
+            <a href="{{ url_for('admin_logout') }}" class="btn btn-sm shadow-sm" style="background-color: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; transition: all 0.3s;" onmouseover="this.style.backgroundColor='rgba(220, 53, 69, 0.9)'; this.style.borderColor='rgba(220, 53, 69, 0.9)'" onmouseout="this.style.backgroundColor='rgba(255,255,255,0.1)'; this.style.borderColor='rgba(255,255,255,0.2)'">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+        <!-- Nav Tabs -->
+        <ul class="nav d-flex flex-nowrap overflow-auto gap-3 gap-md-4 pb-0"
+            style="border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: -1px; scrollbar-width: none;">
+            <li class="nav-item flex-shrink-0">
+                <a href="{{ url_for('admin_dashboard') }}" class="nav-link px-0 py-3"
+                   style="color:#94a3b8; font-weight:500; border-bottom:3px solid transparent; white-space:nowrap;"
+                   onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#94a3b8'">
+                    <i class="fas fa-layer-group me-2"></i>Manage Projects
+                </a>
+            </li>
+            <li class="nav-item flex-shrink-0">
+                <a href="{{ url_for('admin_leads') }}" class="nav-link px-0 py-3"
+                   style="color:#94a3b8; font-weight:500; border-bottom:3px solid transparent; white-space:nowrap;"
+                   onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#94a3b8'">
+                    <i class="fas fa-inbox me-2"></i>Contact Inquiries
+                </a>
+            </li>
+            <li class="nav-item flex-shrink-0">
+                <a href="{{ url_for('admin_testimonials') }}" class="nav-link px-0 py-3 text-white"
+                   style="font-weight:600; border-bottom:3px solid #d4af37; white-space:nowrap;">
+                    <i class="fas fa-quote-left me-2"></i>Testimonials
+                </a>
+            </li>
+            <li class="nav-item flex-shrink-0">
+                <a href="{{ url_for('admin_settings') }}" class="nav-link px-0 py-3"
+                   style="color:#94a3b8; font-weight:500; border-bottom:3px solid transparent; white-space:nowrap;"
+                   onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#94a3b8'">
+                    <i class="fas fa-sliders-h me-2"></i>Site Settings
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="container" style="padding: 3rem 0; margin-bottom: 4rem;">
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
+        <h3 style="color: #0f1e3c; margin: 0; font-weight: 700;">
+            <i class="fas fa-edit" style="color: #d4af37; margin-right: 8px;"></i>Edit Testimonial
+        </h3>
+        <a href="{{ url_for('admin_testimonials') }}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Testimonials
+        </a>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
+            <div class="card shadow-sm border-0 mb-4" style="border-radius: 12px; border-top: 4px solid #d4af37 !important;">
+                <div class="card-body p-4 p-md-5">
+                    <form method="POST" action="{{ url_for('admin_edit_testimonial', testimonial_id=testimonial.id) }}">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Client Name <span class="text-danger">*</span></label>
+                            <input type="text" name="name" class="form-control" required value="{{ testimonial.name }}">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Role / Description <span class="text-danger">*</span></label>
+                            <input type="text" name="role" class="form-control" required value="{{ testimonial.role }}" placeholder="e.g. Homeowner, South Delhi">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Testimonial Text <span class="text-danger">*</span></label>
+                            <textarea name="text" class="form-control" rows="5" required>{{ testimonial.text }}</textarea>
+                            <div class="form-text text-muted mt-1">Write in the client's voice — keep it authentic and specific.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Star Rating</label>
+                            <div class="d-flex gap-2 align-items-center mt-1" id="starRatingInput">
+                                {% for i in range(1, 6) %}
+                                <label class="star-label" style="cursor: pointer; font-size: 1.6rem; color: #cbd5e1; transition: color 0.2s;" data-val="{{ i }}">
+                                    <i class="fas fa-star"></i>
+                                    <input type="radio" name="stars" value="{{ i }}" {% if i == testimonial.stars %}checked{% endif %} style="display: none;">
+                                </label>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" name="is_active" id="isActiveCheck" {% if testimonial.is_active %}checked{% endif %}>
+                                <label class="form-check-label fw-bold" for="isActiveCheck">Visible on Website</label>
+                            </div>
+                            <div class="form-text text-muted">Uncheck to hide this testimonial from the homepage without deleting it.</div>
+                        </div>
+
+                        <!-- Live Preview -->
+                        <div class="mb-4 p-4 rounded" style="background: #f8f9fa; border-left: 4px solid #d4af37;">
+                            <p class="text-muted mb-2" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">Live Preview</p>
+                            <div style="color: #d4af37; margin-bottom: 0.5rem;" id="previewStars">
+                                {% for i in range(testimonial.stars) %}<i class="fas fa-star"></i>{% endfor %}
+                                {% for i in range(5 - testimonial.stars) %}<i class="far fa-star"></i>{% endfor %}
+                            </div>
+                            <p id="previewText" style="color: #64748b; font-style: italic; font-size: 0.95rem; line-height: 1.7; margin-bottom: 0.5rem;">"{{ testimonial.text }}"</p>
+                            <p id="previewName" style="font-weight: 700; color: #0f1e3c; margin-bottom: 0.1rem;">{{ testimonial.name }}</p>
+                            <p id="previewRole" style="font-size: 0.85rem; color: #1e40af; margin: 0;">{{ testimonial.role }}</p>
+                        </div>
+
+                        <button type="submit" class="btn w-100 py-3 fw-bold shadow-sm" style="background: linear-gradient(135deg, #0f1e3c 0%, #1e40af 100%); color: white; border: none; font-size: 1.05rem; border-radius: 8px;">
+                            <i class="fas fa-save"></i> Save Changes
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .star-label { color: #cbd5e1; }
+    .star-label.active { color: #d4af37; }
+</style>
+
+<script>
+// ===== LIVE PREVIEW =====
+const nameInput   = document.querySelector('input[name="name"]');
+const roleInput   = document.querySelector('input[name="role"]');
+const textInput   = document.querySelector('textarea[name="text"]');
+const previewName = document.getElementById('previewName');
+const previewRole = document.getElementById('previewRole');
+const previewText = document.getElementById('previewText');
+const previewStars = document.getElementById('previewStars');
+
+nameInput.addEventListener('input', () => previewName.textContent = nameInput.value || 'Client Name');
+roleInput.addEventListener('input', () => previewRole.textContent = roleInput.value || 'Role');
+textInput.addEventListener('input', () => previewText.textContent = '"' + (textInput.value || '...') + '"');
+
+// ===== STAR RATING =====
+const starLabels = document.querySelectorAll('.star-label');
+
+function updateStars(val) {
+    starLabels.forEach(lbl => {
+        lbl.classList.toggle('active', parseInt(lbl.dataset.val) <= val);
+    });
+    // Update preview
+    let starsHtml = '';
+    for (let i = 1; i <= 5; i++) {
+        starsHtml += i <= val ? '<i class="fas fa-star"></i>' : '<i class="far fa-star"></i>';
+    }
+    previewStars.innerHTML = starsHtml;
+}
+
+// Set initial state from current value
+const currentRating = {{ testimonial.stars }};
+updateStars(currentRating);
+
+const starInputs = document.querySelectorAll('input[name="stars"]');
+
+starLabels.forEach(lbl => {
+    lbl.addEventListener('mouseenter', () => updateStars(parseInt(lbl.dataset.val)));
+    lbl.addEventListener('mouseleave', () => {
+        const checked = document.querySelector('input[name="stars"]:checked');
+        updateStars(checked ? parseInt(checked.value) : currentRating);
+    });
+});
+
+starInputs.forEach(input => {
+    input.addEventListener('change', () => {
+        updateStars(parseInt(input.value));
+    });
+});
+</script>
+
+{% endblock %}

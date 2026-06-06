@@ -1,0 +1,308 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    /* Star picker */
+    .star-picker { display: flex; gap: 0.5rem; }
+    .star-picker label {
+        font-size: 1.7rem; cursor: pointer;
+        color: #d4af37; opacity: 0.25;
+        transition: opacity 0.15s, transform 0.15s;
+        margin: 0; line-height: 1;
+    }
+    .star-picker label.lit { opacity: 1; }
+    .star-picker label:hover { transform: scale(1.15); }
+    .star-picker input[type="radio"] { display: none; }
+    /* Reorder btn */
+    .reorder-btn { background: #f1f5f9; border: none; width: 32px; height: 32px;
+        border-radius: 6px; font-size: 0.75rem; color: #64748b;
+        transition: all 0.2s; padding: 0; display: flex; align-items: center;
+        justify-content: center; }
+    .reorder-btn:hover { background: #d4af37 !important; color: #0f1e3c !important; }
+    /* Mobile: unstack the form & list */
+    @media (max-width: 767px) {
+        .sticky-form { position: static !important; top: auto !important; }
+    }
+</style>
+
+<!-- Premium Admin Header -->
+<div style="background: linear-gradient(135deg, #0f1e3c 0%, #050b1a 100%); padding-top: 5rem; padding-bottom: 0;">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="text-white mb-0" style="font-weight: 700; letter-spacing: -0.5px;">
+                <i class="fas fa-shield-alt" style="color: #d4af37; margin-right: 10px;"></i>Admin Workspace
+            </h2>
+            <a href="{{ url_for('admin_logout') }}" class="btn btn-sm shadow-sm"
+               style="background-color:rgba(255,255,255,0.1); color:white; border:1px solid rgba(255,255,255,0.2); border-radius:8px; transition:all 0.3s;"
+               onmouseover="this.style.backgroundColor='rgba(220,53,69,0.9)'; this.style.borderColor='rgba(220,53,69,0.9)'"
+               onmouseout="this.style.backgroundColor='rgba(255,255,255,0.1)'; this.style.borderColor='rgba(255,255,255,0.2)'">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+        <!-- Nav Tabs -->
+        <ul class="nav d-flex flex-nowrap overflow-auto gap-3 gap-md-4 pb-0"
+            style="border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: -1px; scrollbar-width: none;">
+            <li class="nav-item flex-shrink-0">
+                <a href="{{ url_for('admin_dashboard') }}" class="nav-link px-0 py-3"
+                   style="color:#94a3b8; font-weight:500; border-bottom:3px solid transparent; white-space:nowrap;"
+                   onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#94a3b8'">
+                    <i class="fas fa-layer-group me-2"></i>Manage Projects
+                </a>
+            </li>
+            <li class="nav-item flex-shrink-0">
+                <a href="{{ url_for('admin_leads') }}" class="nav-link px-0 py-3"
+                   style="color:#94a3b8; font-weight:500; border-bottom:3px solid transparent; white-space:nowrap;"
+                   onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#94a3b8'">
+                    <i class="fas fa-inbox me-2"></i>Contact Inquiries
+                </a>
+            </li>
+            <li class="nav-item flex-shrink-0">
+                <a href="{{ url_for('admin_testimonials') }}" class="nav-link px-0 py-3 text-white"
+                   style="font-weight:600; border-bottom:3px solid #d4af37; white-space:nowrap;">
+                    <i class="fas fa-quote-left me-2"></i>Testimonials
+                </a>
+            </li>
+            <li class="nav-item flex-shrink-0">
+                <a href="{{ url_for('admin_settings') }}" class="nav-link px-0 py-3"
+                   style="color:#94a3b8; font-weight:500; border-bottom:3px solid transparent; white-space:nowrap;"
+                   onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#94a3b8'">
+                    <i class="fas fa-sliders-h me-2"></i>Site Settings
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="container" style="padding: 2.5rem 0 4rem;">
+    <div class="row g-4">
+
+        <!-- ===== ADD FORM ===== -->
+        <div class="col-12 col-lg-5">
+            <div class="card shadow-sm border-0 sticky-form"
+                 style="border-radius: 12px; border-top: 4px solid #d4af37 !important; position: sticky; top: 90px;">
+                <div class="card-body p-4">
+                    <h5 class="mb-4 fw-bold" style="color: #0f1e3c;">
+                        <i class="fas fa-plus-circle" style="color: #d4af37;"></i> Add New Testimonial
+                    </h5>
+                    <form method="POST" action="{{ url_for('admin_testimonials') }}" id="addForm">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Client Name <span class="text-danger">*</span></label>
+                            <input type="text" name="name" class="form-control" required placeholder="e.g. Ananya Mehta">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Role / Description <span class="text-danger">*</span></label>
+                            <input type="text" name="role" class="form-control" required placeholder="e.g. Homeowner, South Delhi">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Testimonial Text <span class="text-danger">*</span></label>
+                            <textarea name="text" class="form-control" rows="4" required placeholder="What the client said…"></textarea>
+                            <div class="form-text text-muted">Write in the client's voice — authentic and specific.</div>
+                        </div>
+
+                        <!-- Star Rating Picker -->
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold d-block">Star Rating</label>
+                            <div class="star-picker" id="addStarPicker">
+                                {% for i in range(1, 6) %}
+                                <label data-val="{{ i }}">
+                                    <i class="fas fa-star"></i>
+                                    <input type="radio" name="stars" value="{{ i }}" {% if i == 5 %}checked{% endif %}>
+                                </label>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" name="is_active" id="addIsActive" checked>
+                                <label class="form-check-label fw-semibold" for="addIsActive">Visible on Website</label>
+                            </div>
+                            <div class="form-text text-muted">Uncheck to save as a draft.</div>
+                        </div>
+
+                        <button type="submit" class="btn w-100 py-2 fw-bold shadow-sm"
+                                style="background: linear-gradient(135deg, #0f1e3c 0%, #1e40af 100%); color:white; border:none; border-radius:8px; font-size:1rem;">
+                            <i class="fas fa-plus me-1"></i> Add Testimonial
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== LIST ===== -->
+        <div class="col-12 col-lg-7">
+            <div class="card shadow-sm border-0" style="border-radius: 12px; overflow: hidden;">
+                <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <h6 class="mb-0 fw-bold" style="color: #0f1e3c;">
+                        <i class="fas fa-list" style="color: #1e40af;"></i> All Testimonials
+                        <span class="badge ms-1" style="background:#f1f5f9; color:#64748b; font-size:0.73rem;">{{ testimonials|length }}</span>
+                    </h6>
+                    <span class="text-muted" style="font-size: 0.78rem;">
+                        <i class="fas fa-arrows-alt-v me-1"></i>Arrows to reorder &nbsp;|&nbsp;
+                        <i class="fas fa-toggle-on me-1"></i>Toggle to show/hide
+                    </span>
+                </div>
+                <div class="card-body p-0">
+                    {% if testimonials %}
+                    <ul class="list-group list-group-flush">
+                        {% for t in testimonials %}
+                        <li class="list-group-item py-3 px-3 px-md-4">
+                            <div class="d-flex gap-3 align-items-start">
+
+                                <!-- Up / Down Arrows -->
+                                <div class="d-flex flex-column gap-1 flex-shrink-0 pt-1">
+                                    <button class="reorder-btn" title="Move Up" data-id="{{ t.id }}" data-dir="up">
+                                        <i class="fas fa-chevron-up"></i>
+                                    </button>
+                                    <button class="reorder-btn" title="Move Down" data-id="{{ t.id }}" data-dir="down">
+                                        <i class="fas fa-chevron-down"></i>
+                                    </button>
+                                </div>
+
+                                <!-- Content -->
+                                <div class="flex-grow-1" style="min-width: 0;">
+                                    <div class="d-flex justify-content-between align-items-start flex-wrap gap-1 mb-1">
+                                        <div>
+                                            <span class="fw-bold" style="color:#0f1e3c;">{{ t.name }}</span>
+                                            <span class="text-muted ms-1" style="font-size:0.82rem;">{{ t.role }}</span>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2 flex-shrink-0">
+                                            <span style="color:#d4af37; font-size:0.75rem; letter-spacing: 1px;">
+                                                {% for i in range(t.stars) %}<i class="fas fa-star"></i>{% endfor %}{% for i in range(5 - t.stars) %}<i class="far fa-star"></i>{% endfor %}
+                                            </span>
+                                            <div class="form-check form-switch mb-0">
+                                                <input class="form-check-input visibility-toggle" type="checkbox"
+                                                       role="switch" data-id="{{ t.id }}"
+                                                       {% if t.is_active %}checked{% endif %}
+                                                       style="cursor:pointer;" title="{{ 'Hide from website' if t.is_active else 'Show on website' }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="text-muted mb-2" style="font-size:0.88rem; line-height:1.55; font-style:italic;">
+                                        "{{ t.text[:130] }}{% if t.text|length > 130 %}…{% endif %}"
+                                    </p>
+                                    <div class="d-flex gap-2">
+                                        <a href="{{ url_for('admin_edit_testimonial', testimonial_id=t.id) }}"
+                                           class="btn btn-sm btn-outline-primary py-1">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </a>
+                                        <form action="{{ url_for('admin_delete_testimonial', testimonial_id=t.id) }}"
+                                              method="POST"
+                                              onsubmit="return confirm('Permanently delete this testimonial?');"
+                                              style="display:inline;">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger py-1">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <div class="text-center py-5 text-muted">
+                        <i class="fas fa-quote-left fa-3x mb-3" style="color:#e2e8f0;"></i><br>
+                        No testimonials yet. Add your first one on the left.
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Toast -->
+<div id="toastNotif" style="position:fixed; bottom:1.5rem; right:1.5rem; z-index:9999; display:none; min-width:280px; max-width:90vw;">
+    <div id="toastBody" class="d-flex align-items-center gap-3 shadow-lg p-3 rounded-3 text-white"
+         style="background:#1e293b; font-weight:500; font-size:0.9rem;">
+        <i id="toastIcon" class="fas fa-check-circle text-success fa-lg flex-shrink-0"></i>
+        <span id="toastMsg">Done!</span>
+    </div>
+</div>
+
+<script>
+// ===== STAR PICKER INIT =====
+function initStarPicker(containerId, defaultVal) {
+    const picker = document.getElementById(containerId);
+    if (!picker) return;
+    const labels = picker.querySelectorAll('label');
+    const inputs = picker.querySelectorAll('input[type="radio"]');
+
+    function light(val) {
+        labels.forEach(l => l.classList.toggle('lit', parseInt(l.dataset.val) <= val));
+    }
+
+    // Set initial state
+    const checked = picker.querySelector('input[type="radio"]:checked');
+    light(checked ? parseInt(checked.value) : defaultVal);
+
+    labels.forEach(lbl => {
+        lbl.addEventListener('mouseenter', () => light(parseInt(lbl.dataset.val)));
+        lbl.addEventListener('mouseleave', () => {
+            const checkedVal = picker.querySelector('input[type="radio"]:checked');
+            light(checkedVal ? parseInt(checkedVal.value) : defaultVal);
+        });
+    });
+
+    inputs.forEach(input => {
+        input.addEventListener('change', () => {
+            light(parseInt(input.value));
+        });
+    });
+}
+
+initStarPicker('addStarPicker', 5);
+
+// ===== TOAST =====
+function showToast(msg, isError = false) {
+    document.getElementById('toastIcon').className = isError
+        ? 'fas fa-exclamation-triangle text-warning fa-lg flex-shrink-0'
+        : 'fas fa-check-circle text-success fa-lg flex-shrink-0';
+    document.getElementById('toastMsg').textContent = msg;
+    const t = document.getElementById('toastNotif');
+    t.style.display = 'block';
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => t.style.display = 'none', 3500);
+}
+
+// ===== REORDER =====
+document.querySelectorAll('.reorder-btn').forEach(btn => {
+    btn.addEventListener('click', function () {
+        const id = parseInt(this.dataset.id);
+        const dir = this.dataset.dir;
+        this.disabled = true;
+        fetch('/admin/testimonials/reorder', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id, direction: dir })
+        })
+        .then(r => r.json())
+        .then(d => {
+            if (d.success) { showToast('Order updated — refreshing…'); setTimeout(() => location.reload(), 700); }
+            else { this.disabled = false; showToast('Could not reorder.', true); }
+        })
+        .catch(() => { this.disabled = false; showToast('Network error.', true); });
+    });
+});
+
+// ===== VISIBILITY TOGGLE =====
+document.querySelectorAll('.visibility-toggle').forEach(tog => {
+    tog.addEventListener('change', function () {
+        const id = this.dataset.id;
+        const self = this;
+        self.disabled = true;
+        fetch(`/admin/testimonials/toggle/${id}`, { method: 'POST' })
+        .then(r => r.json())
+        .then(d => {
+            self.disabled = false;
+            if (d.success) showToast(d.is_active ? '✓ Visible on website.' : 'Hidden from website.');
+            else { self.checked = !self.checked; showToast('Error.', true); }
+        })
+        .catch(() => { self.disabled = false; self.checked = !self.checked; showToast('Network error.', true); });
+    });
+});
+</script>
+{% endblock %}

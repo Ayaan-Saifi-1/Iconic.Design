@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iconic Design - Premium Modular & Luxury Kitchens</title>
+    <title>Iconic Design - Premium Interior Design & Decoration</title>
+    <meta name="description" content="Iconic Design is India's premier luxury interior design and decoration firm. With 25+ years of experience crafting stunning residential and commercial spaces across Mumbai, Delhi, Bangalore and beyond.">
+    <meta name="keywords" content="interior design India, luxury interior designer, bespoke furniture, home decor, interior decoration, space planning, premium interiors">
+    <meta property="og:title" content="Iconic Design - Premium Interior Design & Decoration">
+    <meta property="og:description" content="India's premier luxury interior design firm. Crafting iconic living spaces with precision and passion.">
+    <meta property="og:type" content="website">
     
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='logo_transparent.png') }}?v=2">
@@ -13,7 +18,7 @@
     <!-- Font Awesome 6 -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&family=Cormorant+Garamond:wght@500;600;700&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&family=Cormorant+Garamond:wght@500;600;700&family=Montserrat:wght@300;400;500&family=Great+Vibes&display=swap" rel="stylesheet">
     <!-- AOS Animation Library -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     
@@ -43,6 +48,13 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            padding-top: 90px; /* Offset for fixed-top navbar */
+        }
+        
+        @media (max-width: 991.98px) {
+            body {
+                padding-top: 70px; /* Offset for smaller mobile fixed-top navbar */
+            }
         }
         
         main { flex: 1; }
@@ -338,10 +350,11 @@
             }
         }
     </style>
+</head>
 <body>
 
     <!-- NAVIGATION BAR -->
-    <nav class="navbar navbar-expand-lg sticky-top navbar-dark">
+    <nav class="navbar navbar-expand-lg fixed-top navbar-dark">
         <div class="container">
             <div class="d-flex align-items-center">
                 {% if request.path != '/' %}
@@ -398,8 +411,8 @@
         <div class="container">
             <div class="row mb-4">
                 <div class="col-md-4 mb-4">
-                    <h6>About Iconic Design</h6>
-                    <p>Delivering excellence in premium kitchen design and luxury renovations. Crafting culinary spaces with precision and passion.</p>
+                    <h6>About <span style="font-family: 'Great Vibes', cursive; font-size: 1.35em; font-weight: 400; color: var(--accent-gold); text-transform: lowercase; display: inline-block; vertical-align: middle; line-height: 1;">iconic<span style="font-family: 'Poppins', sans-serif; font-size: 0.55em; text-transform: uppercase; font-weight: 600; color: #fff; letter-spacing: 0.5px; margin-left: 1px;">.design</span></span></h6>
+                    <p>Delivering excellence in premium interior design and luxury decoration. Crafting stunning spaces with precision and passion.</p>
                 </div>
                 <div class="col-md-4 mb-4">
                     <h6>Quick Links</h6>
@@ -412,14 +425,14 @@
                 </div>
                 <div class="col-md-4 mb-4">
                     <h6>Contact Info</h6>
-                    <p>📍 Delhi, India<br>
-                    📞 +91-11-XXXX-XXXX<br>
-                    📧 info@iconic.design</p>
+                    <p>📍 {{ site_settings.get('founder_location', 'Sector 56, Gurgaon') }}, India<br>
+                    📞 <a href="tel:{{ site_settings.get('founder_phone', '+91 98116 85628') | replace(' ', '') }}" style="color: #cbd5e1; text-decoration: none;">{{ site_settings.get('founder_phone', '+91 98116 85628') }}</a><br>
+                    📧 <a href="mailto:{{ site_settings.get('founder_email', 'shakirali1203@gmail.com') }}" style="color: #cbd5e1; text-decoration: none;">{{ site_settings.get('founder_email', 'shakirali1203@gmail.com') }}</a></p>
                 </div>
             </div>
             <div class="footer-divider">
                 <div class="footer-bottom">
-                    <p>&copy; 2025 Iconic Design. All rights reserved. | <a href="#" style="color: #b0b9c3; text-decoration: none;">Privacy Policy</a> | <a href="#" style="color: #b0b9c3; text-decoration: none;">Terms of Service</a></p>
+                    <p>&copy; 2026 Iconic Design. All rights reserved. | <a href="#" style="color: #b0b9c3; text-decoration: none;">Privacy Policy</a> | <a href="#" style="color: #b0b9c3; text-decoration: none;">Terms of Service</a></p>
                 </div>
             </div>
         </div>
