@@ -1,0 +1,14 @@
+[Unit]
+Description=Gunicorn instance to serve Iconic Design application
+After=network.target
+
+[Service]
+User=root
+Group=www-data
+WorkingDirectory=/path/to/your/app
+Environment="PATH=/path/to/your/app/venv/bin"
+EnvironmentFile=/path/to/your/app/.env
+ExecStart=/path/to/your/app/venv/bin/gunicorn --workers 3 --bind unix:app.sock -m 007 wsgi:app
+
+[Install]
+WantedBy=multi-user.target

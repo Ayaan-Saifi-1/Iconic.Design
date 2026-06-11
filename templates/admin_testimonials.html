@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+﻿{% extends "base.html" %}
 
 {% block content %}
 <style>
@@ -6,7 +6,7 @@
     .star-picker { display: flex; gap: 0.5rem; }
     .star-picker label {
         font-size: 1.7rem; cursor: pointer;
-        color: #d4af37; opacity: 0.25;
+        color: var(--accent-gold); opacity: 0.25;
         transition: opacity 0.15s, transform 0.15s;
         margin: 0; line-height: 1;
     }
@@ -15,10 +15,10 @@
     .star-picker input[type="radio"] { display: none; }
     /* Reorder btn */
     .reorder-btn { background: #f1f5f9; border: none; width: 32px; height: 32px;
-        border-radius: 6px; font-size: 0.75rem; color: #64748b;
+        border-radius: 6px; font-size: 0.75rem; color: var(--text-light);
         transition: all 0.2s; padding: 0; display: flex; align-items: center;
         justify-content: center; }
-    .reorder-btn:hover { background: #d4af37 !important; color: #0f1e3c !important; }
+    .reorder-btn:hover { background: var(--accent-gold) !important; color: var(--primary-dark) !important; }
     /* Mobile: unstack the form & list */
     @media (max-width: 767px) {
         .sticky-form { position: static !important; top: auto !important; }
@@ -26,46 +26,46 @@
 </style>
 
 <!-- Premium Admin Header -->
-<div style="background: linear-gradient(135deg, #0f1e3c 0%, #050b1a 100%); padding-top: 5rem; padding-bottom: 0;">
+<div style="background: rgba(235, 222, 202, 0.96); padding-top: 5rem; padding-bottom: 0;">
     <div class="container">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="text-white mb-0" style="font-weight: 700; letter-spacing: -0.5px;">
-                <i class="fas fa-shield-alt" style="color: #d4af37; margin-right: 10px;"></i>Admin Workspace
+            <h2 class="text-dark mb-0" style="font-weight: 700; letter-spacing: -0.5px;">
+                <i class="fas fa-shield-alt" style="color: var(--accent-gold); margin-right: 10px;"></i>Admin Workspace
             </h2>
             <a href="{{ url_for('admin_logout') }}" class="btn btn-sm shadow-sm"
                style="background-color:rgba(255,255,255,0.1); color:white; border:1px solid rgba(255,255,255,0.2); border-radius:8px; transition:all 0.3s;"
                onmouseover="this.style.backgroundColor='rgba(220,53,69,0.9)'; this.style.borderColor='rgba(220,53,69,0.9)'"
-               onmouseout="this.style.backgroundColor='rgba(255,255,255,0.1)'; this.style.borderColor='rgba(255,255,255,0.2)'">
+               onmouseout="this.style.backgroundColor='rgba(0,0,0,0.05)'; this.style.color='var(--primary-dark)';">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </a>
         </div>
         <!-- Nav Tabs -->
         <ul class="nav d-flex flex-nowrap overflow-auto gap-3 gap-md-4 pb-0"
-            style="border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: -1px; scrollbar-width: none;">
+            style="border-bottom: 1px solid rgba(0,0,0,0.1); margin-bottom: -1px; scrollbar-width: none;">
             <li class="nav-item flex-shrink-0">
                 <a href="{{ url_for('admin_dashboard') }}" class="nav-link px-0 py-3"
-                   style="color:#94a3b8; font-weight:500; border-bottom:3px solid transparent; white-space:nowrap;"
-                   onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#94a3b8'">
+                   style="color:rgba(15,30,60,0.6); font-weight:500; border-bottom:3px solid transparent; white-space:nowrap;"
+                   onmouseover="this.style.color='var(--primary-dark)'" onmouseout="this.style.color='rgba(15,30,60,0.6)'">
                     <i class="fas fa-layer-group me-2"></i>Manage Projects
                 </a>
             </li>
             <li class="nav-item flex-shrink-0">
                 <a href="{{ url_for('admin_leads') }}" class="nav-link px-0 py-3"
-                   style="color:#94a3b8; font-weight:500; border-bottom:3px solid transparent; white-space:nowrap;"
-                   onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#94a3b8'">
+                   style="color:rgba(15,30,60,0.6); font-weight:500; border-bottom:3px solid transparent; white-space:nowrap;"
+                   onmouseover="this.style.color='var(--primary-dark)'" onmouseout="this.style.color='rgba(15,30,60,0.6)'">
                     <i class="fas fa-inbox me-2"></i>Contact Inquiries
                 </a>
             </li>
             <li class="nav-item flex-shrink-0">
-                <a href="{{ url_for('admin_testimonials') }}" class="nav-link px-0 py-3 text-white"
-                   style="font-weight:600; border-bottom:3px solid #d4af37; white-space:nowrap;">
+                <a href="{{ url_for('admin_testimonials') }}" class="nav-link px-0 py-3 text-dark"
+                   style="font-weight:600; border-bottom:3px solid var(--accent-gold); white-space:nowrap;">
                     <i class="fas fa-quote-left me-2"></i>Testimonials
                 </a>
             </li>
             <li class="nav-item flex-shrink-0">
                 <a href="{{ url_for('admin_settings') }}" class="nav-link px-0 py-3"
-                   style="color:#94a3b8; font-weight:500; border-bottom:3px solid transparent; white-space:nowrap;"
-                   onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#94a3b8'">
+                   style="color:rgba(15,30,60,0.6); font-weight:500; border-bottom:3px solid transparent; white-space:nowrap;"
+                   onmouseover="this.style.color='var(--primary-dark)'" onmouseout="this.style.color='rgba(15,30,60,0.6)'">
                     <i class="fas fa-sliders-h me-2"></i>Site Settings
                 </a>
             </li>
@@ -79,10 +79,10 @@
         <!-- ===== ADD FORM ===== -->
         <div class="col-12 col-lg-5">
             <div class="card shadow-sm border-0 sticky-form"
-                 style="border-radius: 12px; border-top: 4px solid #d4af37 !important; position: sticky; top: 90px;">
+                 style="border-radius: 12px; border-top: 4px solid var(--accent-gold) !important; position: sticky; top: 90px;">
                 <div class="card-body p-4">
-                    <h5 class="mb-4 fw-bold" style="color: #0f1e3c;">
-                        <i class="fas fa-plus-circle" style="color: #d4af37;"></i> Add New Testimonial
+                    <h5 class="mb-4 fw-bold" style="color: var(--primary-dark);">
+                        <i class="fas fa-plus-circle" style="color: var(--accent-gold);"></i> Add New Testimonial
                     </h5>
                     <form method="POST" action="{{ url_for('admin_testimonials') }}" id="addForm">
                         <div class="mb-3">
@@ -121,7 +121,7 @@
                         </div>
 
                         <button type="submit" class="btn w-100 py-2 fw-bold shadow-sm"
-                                style="background: linear-gradient(135deg, #0f1e3c 0%, #1e40af 100%); color:white; border:none; border-radius:8px; font-size:1rem;">
+                                style="background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-blue) 100%); color:white; border:none; border-radius:8px; font-size:1rem;">
                             <i class="fas fa-plus me-1"></i> Add Testimonial
                         </button>
                     </form>
@@ -133,9 +133,9 @@
         <div class="col-12 col-lg-7">
             <div class="card shadow-sm border-0" style="border-radius: 12px; overflow: hidden;">
                 <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center flex-wrap gap-2">
-                    <h6 class="mb-0 fw-bold" style="color: #0f1e3c;">
-                        <i class="fas fa-list" style="color: #1e40af;"></i> All Testimonials
-                        <span class="badge ms-1" style="background:#f1f5f9; color:#64748b; font-size:0.73rem;">{{ testimonials|length }}</span>
+                    <h6 class="mb-0 fw-bold" style="color: var(--primary-dark);">
+                        <i class="fas fa-list" style="color: var(--primary-blue);"></i> All Testimonials
+                        <span class="badge ms-1" style="background:#f1f5f9; color:var(--text-light); font-size:0.73rem;">{{ testimonials|length }}</span>
                     </h6>
                     <span class="text-muted" style="font-size: 0.78rem;">
                         <i class="fas fa-arrows-alt-v me-1"></i>Arrows to reorder &nbsp;|&nbsp;
@@ -163,11 +163,11 @@
                                 <div class="flex-grow-1" style="min-width: 0;">
                                     <div class="d-flex justify-content-between align-items-start flex-wrap gap-1 mb-1">
                                         <div>
-                                            <span class="fw-bold" style="color:#0f1e3c;">{{ t.name }}</span>
+                                            <span class="fw-bold" style="color:var(--primary-dark);">{{ t.name }}</span>
                                             <span class="text-muted ms-1" style="font-size:0.82rem;">{{ t.role }}</span>
                                         </div>
                                         <div class="d-flex align-items-center gap-2 flex-shrink-0">
-                                            <span style="color:#d4af37; font-size:0.75rem; letter-spacing: 1px;">
+                                            <span style="color:var(--accent-gold); font-size:0.75rem; letter-spacing: 1px;">
                                                 {% for i in range(t.stars) %}<i class="fas fa-star"></i>{% endfor %}{% for i in range(5 - t.stars) %}<i class="far fa-star"></i>{% endfor %}
                                             </span>
                                             <div class="form-check form-switch mb-0">
@@ -216,7 +216,7 @@
 
 <!-- Toast -->
 <div id="toastNotif" style="position:fixed; bottom:1.5rem; right:1.5rem; z-index:9999; display:none; min-width:280px; max-width:90vw;">
-    <div id="toastBody" class="d-flex align-items-center gap-3 shadow-lg p-3 rounded-3 text-white"
+    <div id="toastBody" class="d-flex align-items-center gap-3 shadow-lg p-3 rounded-3 text-dark"
          style="background:#1e293b; font-weight:500; font-size:0.9rem;">
         <i id="toastIcon" class="fas fa-check-circle text-success fa-lg flex-shrink-0"></i>
         <span id="toastMsg">Done!</span>

@@ -31,8 +31,8 @@
     }
 
     .hero {
-        background: linear-gradient(135deg, #0f1e3c 0%, #1e40af 100%);
-        color: white;
+        background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+        color: var(--primary-dark);
         padding: 90px 0 0 0;
         position: relative;
         overflow: hidden;
@@ -87,7 +87,8 @@
     }
     
     .btn-outline-light {
-        border: 2px solid white;
+        border: 2px solid var(--primary-dark);
+        color: var(--primary-dark);
         padding: 0.8rem 2.5rem;
         font-weight: 600;
         text-transform: uppercase;
@@ -97,15 +98,15 @@
     }
     
     .btn-outline-light:hover {
-        background-color: white;
-        color: #0f1e3c;
+        background-color: var(--primary-dark);
+        color: white;
         transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
     }
     
     /* STATS SECTION - Key metrics display */
     .stats-section {
-        background-color: #f8f9fa;
+        background-color: var(--accent-light);
         padding: 3rem 0;
         margin-top: 0;
         position: relative;
@@ -119,12 +120,12 @@
     
     .stat-number {
         font-size: 2.5rem;
-        color: #d4af37;
+        color: var(--accent-gold);
         font-weight: 700;
     }
     
     .stat-label {
-        color: #0f1e3c;
+        color: var(--primary-dark);
         font-weight: 600;
         margin-top: 0.5rem;
         text-transform: uppercase;
@@ -140,7 +141,7 @@
         font-size: 2.8rem;
         margin-bottom: 3.5rem;
         text-align: center;
-        color: #0f1e3c;
+        color: var(--primary-dark);
         font-weight: 700;
         position: relative;
     }
@@ -150,7 +151,7 @@
         display: block;
         width: 80px;
         height: 3px;
-        background-color: #d4af37;
+        background-color: var(--accent-gold);
         margin: 1rem auto 0;
         border-radius: 2px;
     }
@@ -211,7 +212,7 @@
     }
     
     .project-overlay-text h6 {
-        color: #d4af37;
+        color: var(--accent-gold);
         font-size: 0.85rem;
         text-transform: uppercase;
         letter-spacing: 1px;
@@ -224,7 +225,7 @@
     }
     
     .project-card-title {
-        color: #0f1e3c;
+        color: var(--primary-dark);
         font-size: 1.3rem;
         margin-bottom: 0.5rem;
         font-weight: 700;
@@ -235,7 +236,7 @@
         justify-content: space-between;
         align-items: center;
         font-size: 0.9rem;
-        color: #64748b;
+        color: var(--text-light);
         margin-top: 1rem;
     }
     
@@ -252,7 +253,7 @@
     }
     
     .pagination-info {
-        color: #64748b;
+        color: var(--text-light);
         font-size: 0.95rem;
         margin-bottom: 1.5rem;
     }
@@ -263,21 +264,21 @@
     }
     
     .page-link {
-        color: #1e40af;
-        border-color: #1e40af;
+        color: var(--primary-blue);
+        border-color: var(--primary-blue);
         border-radius: 4px;
         margin: 0 2px;
         transition: all 0.3s ease;
     }
     
     .page-link:hover {
-        background-color: #1e40af;
+        background-color: var(--primary-blue);
         color: white;
     }
     
     .page-item.active .page-link {
-        background-color: #1e40af;
-        border-color: #1e40af;
+        background-color: var(--primary-blue);
+        border-color: var(--primary-blue);
     }
     
     .view-all-btn {
@@ -293,13 +294,13 @@
     }
     
     .about-text h3 {
-        color: #0f1e3c;
+        color: var(--primary-dark);
         margin-bottom: 1rem;
         font-size: 2rem;
     }
     
     .about-text p {
-        color: #64748b;
+        color: var(--text-light);
         margin-bottom: 1rem;
         line-height: 1.8;
     }
@@ -335,21 +336,22 @@
 
     /* GLASSMORPHIC HERO CARD */
     .hero-glass-card {
-        background: rgba(15, 30, 60, 0.55);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
+        background: rgba(255, 255, 255, 0.35);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
         padding: 3rem;
         border-radius: 20px;
-        border: 1px solid rgba(212, 175, 55, 0.45);
-        box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 15px rgba(212, 175, 55, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        box-shadow: 0 20px 50px rgba(0,0,0,0.1), inset 0 0 15px rgba(255, 255, 255, 0.5);
         max-width: 680px;
         margin: 0 auto;
+        color: var(--primary-dark);
     }
 
 
     /* SERVICES SECTION - Service cards */
     .service-card {
-        background: #f8f9fa;
+        background: var(--accent-light);
         padding: 2rem;
         border-radius: 8px;
         text-align: center;
@@ -360,23 +362,23 @@
     .service-card:hover {
         background: white;
         box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-        border-left-color: #d4af37;
+        border-left-color: var(--accent-gold);
     }
     
     .service-icon {
         font-size: 2.5rem;
-        color: #1e40af;
+        color: var(--primary-blue);
         margin-bottom: 1rem;
     }
     
     .service-card h5 {
-        color: #0f1e3c;
+        color: var(--primary-dark);
         margin-bottom: 1rem;
         font-size: 1.2rem;
     }
     
     .service-card p {
-        color: #64748b;
+        color: var(--text-light);
         font-size: 0.95rem;
     }
     
@@ -386,11 +388,11 @@
         padding: 2rem;
         border-radius: 8px;
         box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-        border-top: 3px solid #d4af37;
+        border-top: 3px solid var(--accent-gold);
     }
     
     .testimonial-text {
-        color: #64748b;
+        color: var(--text-light);
         font-size: 1rem;
         margin-bottom: 1.5rem;
         line-height: 1.8;
@@ -398,36 +400,38 @@
     
     .testimonial-author {
         font-weight: 600;
-        color: #0f1e3c;
+        color: var(--primary-dark);
     }
     
     .testimonial-role {
         font-size: 0.85rem;
-        color: #1e40af;
+        color: var(--primary-blue);
         text-transform: uppercase;
         letter-spacing: 0.5px;
     }
     
     .stars {
-        color: #d4af37;
+        color: var(--accent-gold);
         margin-bottom: 1rem;
     }
     
     /* CTA SECTION - Call to action */
     .cta-section {
-        background: linear-gradient(135deg, #0f1e3c 0%, #1e40af 100%);
-        color: white;
-        padding: 4rem 0;
+        background: var(--surface-cta);
+        border-top: 1px solid rgba(212, 175, 55, 0.2);
+        border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+        color: var(--text-dark);
+        padding: 5rem 0;
         text-align: center;
     }
     
     .cta-section h2 {
-        color: white;
+        color: var(--primary-dark);
         margin-bottom: 1.5rem;
     }
     
     .cta-section p {
-        opacity: 0.9;
+        color: var(--text-light);
         font-size: 1.1rem;
         max-width: 600px;
         margin: 0 auto 1.5rem;
@@ -511,7 +515,7 @@
             padding: 3rem 0 !important;
             position: relative;
             z-index: 3;
-            background-color: #f8f9fa;
+            background-color: var(--accent-light);
         }
         .stats-section .stat-card {
             transform: none !important;
@@ -548,16 +552,16 @@
 
 <!-- ===== HERO SECTION ===== -->
 <!-- Main banner with company headline and CTA buttons -->
-<section class="hero" style="background: linear-gradient(135deg, rgba(10,20,45,0.72) 0%, rgba(15,35,90,0.68) 100%), url('/static/uploads/hero_bg.png') center center/cover no-repeat;">
+<section class="hero" style="background: linear-gradient(135deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.2) 100%), url('/static/uploads/hero_bg.png') center center/cover no-repeat;">
     <div class="container hero-content">
         <div class="row">
             <div class="col-12 col-md-10 col-lg-7" data-aos="fade-right">
                 <div class="hero-glass-card">
-                    <span class="gold-accent" style="background: rgba(212, 175, 55, 0.15); border: 1px solid rgba(212, 175, 55, 0.3); display: inline-block;">
-                        <i class="fas fa-crown"></i> {{ site_settings.get('hero_badge', "India's Premier Interior Designers") }}
+                    <span class="gold-accent" style="background: rgba(255, 255, 255, 0.6); border: 1px solid rgba(255, 255, 255, 0.8); display: inline-block; color: var(--primary-dark); font-weight: 600;">
+                        <i class="fas fa-crown" style="color: var(--accent-gold);"></i> {{ site_settings.get('hero_badge', "India's Premier Interior Designers") }}
                     </span>
-                    <h1>{{ site_settings.get('hero_title', 'Crafting Iconic Interiors') }}</h1>
-                    <p>{{ site_settings.get('hero_desc', 'With over 25 years of experience, Iconic Design delivers premium interior design, luxury decoration, and bespoke residential environments tailored to your lifestyle.') }}</p>
+                    <h1 style="color: var(--primary-dark);">{{ site_settings.get('hero_title', 'Crafting Iconic Interiors') }}</h1>
+                    <p style="color: var(--primary-dark); font-weight: 500;">{{ site_settings.get('hero_desc', 'With over 25 years of experience, Iconic Design delivers premium interior design, luxury decoration, and bespoke residential environments tailored to your lifestyle.') }}</p>
                     <div class="d-flex flex-column flex-md-row gap-3 mt-4">
                         <!-- CTA Buttons - Link to all projects and contact -->
                         <a href="/projects" class="btn btn-primary">View Portfolio</a>
@@ -606,36 +610,36 @@
                         <!-- Sleek Glassmorphic Overlay Badge -->
                         <div style="position: absolute; bottom: 1.2rem; left: 1.2rem; right: 1.2rem; background: rgba(15, 30, 60, 0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); padding: 0.8rem 1.2rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.12); box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
                             <span style="color: #fff; font-size: 1rem; font-weight: 700; letter-spacing: 0.5px; display: block; line-height: 1.2;">{{ site_settings.get('founder_name', 'Shakir Ali') }}</span>
-                            <span style="color: #d4af37; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; display: block; margin-top: 3px;">{{ site_settings.get('founder_title', 'Founder') }}</span>
+                            <span style="color: var(--accent-gold); font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; display: block; margin-top: 3px;">{{ site_settings.get('founder_title', 'Founder') }}</span>
                         </div>
                     </div>
                     
                     <!-- Mobile-Only Founder Details (Placed right below the image) -->
                     <div class="d-block d-lg-none mt-3" style="width: 100%; max-width: 340px; margin: 0 auto;">
                         <div style="border-top: 1px solid rgba(15, 30, 60, 0.08); border-bottom: 1px solid rgba(15, 30, 60, 0.08); padding: 1.25rem 1rem;">
-                            <h6 style="color: #0f1e3c; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem;">
-                                <i class="fas fa-address-book" style="color: #d4af37; margin-right: 0.5rem;"></i> Direct Contact Details
+                            <h6 style="color: var(--primary-dark); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem;">
+                                <i class="fas fa-address-book" style="color: var(--accent-gold); margin-right: 0.5rem;"></i> Direct Contact Details
                             </h6>
                             <div class="d-flex flex-column gap-3">
                                 <div class="d-flex align-items-center gap-3">
-                                    <i class="fas fa-phone-alt" style="color: #d4af37; font-size: 0.95rem; width: 18px; text-align: center;"></i>
+                                    <i class="fas fa-phone-alt" style="color: var(--accent-gold); font-size: 0.95rem; width: 18px; text-align: center;"></i>
                                     <div>
-                                        <span style="color: #64748b; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.5px; display: block; font-weight: 500;">Call / WhatsApp</span>
-                                        <a href="tel:{{ site_settings.get('founder_phone', '+91 98116 85628') | replace(' ', '') }}" style="color: #0f1e3c; font-size: 0.95rem; font-weight: 600; text-decoration: none;">{{ site_settings.get('founder_phone', '+91 98116 85628') }}</a>
+                                        <span style="color: var(--text-light); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.5px; display: block; font-weight: 500;">Call / WhatsApp</span>
+                                        <a href="tel:{{ site_settings.get('founder_phone', '+91 98116 85628') | replace(' ', '') }}" style="color: var(--primary-dark); font-size: 0.95rem; font-weight: 600; text-decoration: none;">{{ site_settings.get('founder_phone', '+91 98116 85628') }}</a>
                                     </div>
                                 </div>
                                 <div class="d-flex align-items-center gap-3">
-                                    <i class="fas fa-envelope" style="color: #d4af37; font-size: 0.95rem; width: 18px; text-align: center;"></i>
+                                    <i class="fas fa-envelope" style="color: var(--accent-gold); font-size: 0.95rem; width: 18px; text-align: center;"></i>
                                     <div>
-                                        <span style="color: #64748b; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.5px; display: block; font-weight: 500;">Founder's Desk</span>
-                                        <a href="mailto:{{ site_settings.get('founder_email', 'shakirali1203@gmail.com') }}" style="color: #0f1e3c; font-size: 0.95rem; font-weight: 600; text-decoration: none;">{{ site_settings.get('founder_email', 'shakirali1203@gmail.com') }}</a>
+                                        <span style="color: var(--text-light); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.5px; display: block; font-weight: 500;">Founder's Desk</span>
+                                        <a href="mailto:{{ site_settings.get('founder_email', 'shakirali1203@gmail.com') }}" style="color: var(--primary-dark); font-size: 0.95rem; font-weight: 600; text-decoration: none;">{{ site_settings.get('founder_email', 'shakirali1203@gmail.com') }}</a>
                                     </div>
                                 </div>
                                 <div class="d-flex align-items-center gap-3">
-                                    <i class="fas fa-map-marker-alt" style="color: #d4af37; font-size: 0.95rem; width: 18px; text-align: center;"></i>
+                                    <i class="fas fa-map-marker-alt" style="color: var(--accent-gold); font-size: 0.95rem; width: 18px; text-align: center;"></i>
                                     <div>
-                                        <span style="color: #64748b; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.5px; display: block; font-weight: 500;">Office Headquarters</span>
-                                        <span style="color: #0f1e3c; font-size: 0.95rem; font-weight: 600;">{{ site_settings.get('founder_location', 'Sector 56, Gurgaon') }}</span>
+                                        <span style="color: var(--text-light); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.5px; display: block; font-weight: 500;">Office Headquarters</span>
+                                        <span style="color: var(--primary-dark); font-size: 0.95rem; font-weight: 600;">{{ site_settings.get('founder_location', 'Sector 56, Gurgaon') }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -645,12 +649,12 @@
             </div>
             <div class="col-12 col-lg-7 about-text" data-aos="fade-left">
                 <h3>{{ site_settings.get('about_subtitle', 'Your Trusted Design Partner') }}</h3>
-                <p>{{ site_settings.get('about_desc1', 'iconic.design, founded by visionary designer Shakir Ali, stands as a beacon of excellence in the premium interior design and luxury decoration industry. Based in Sector 56, Gurgaon, we specialize in delivering world-class residential transformations, high-end commercial spaces, and custom-tailored environments that elevate your lifestyle.') | replace('iconic.design', '<span style="font-family: \'Great Vibes\', cursive; font-size: 1.45em; font-weight: 400; color: #d4af37; text-transform: lowercase; display: inline-block; vertical-align: middle; line-height: 1; margin-right: 2px;">iconic<span style="font-family: \'Poppins\', sans-serif; font-size: 0.55em; text-transform: uppercase; font-weight: 600; color: #0f1e3c; letter-spacing: 0.5px; margin-left: 1px;">.design</span></span>') | safe }}</p>
+                <p>{{ site_settings.get('about_desc1', 'iconic.design, founded by visionary designer Shakir Ali, stands as a beacon of excellence in the premium interior design and luxury decoration industry. Based in Sector 56, Gurgaon, we specialize in delivering world-class residential transformations, high-end commercial spaces, and custom-tailored environments that elevate your lifestyle.') | replace('iconic.design', '<span style="font-family: \'Great Vibes\', cursive; font-size: 1.45em; font-weight: 400; color: var(--accent-gold); text-transform: lowercase; display: inline-block; vertical-align: middle; line-height: 1; margin-right: 2px;">iconic<span style="font-family: \'Poppins\', sans-serif; font-size: 0.55em; text-transform: uppercase; font-weight: 600; color: var(--primary-dark); letter-spacing: 0.5px; margin-left: 1px;">.design</span></span>') | safe }}</p>
                 <p>{{ site_settings.get('about_desc2', "Under Shakir Ali's leadership, our team of expert decorators and craftsmen combine aesthetic innovation, spatial ergonomics, and premium material curation. We are committed to turning your residential and commercial visions into reality with immaculate execution and transparent service.") }}</p>
                 <ul class="list-unstyled mb-4">
-                    <li><i class="fas fa-check" style="color: #d4af37; margin-right: 0.5rem;"></i> {{ site_settings.get('about_bullet1', 'Bespoke Furniture & Material Curation') }}</li>
-                    <li><i class="fas fa-check" style="color: #d4af37; margin-right: 0.5rem;"></i> {{ site_settings.get('about_bullet2', 'End-to-End Space Planning & Execution') }}</li>
-                    <li><i class="fas fa-check" style="color: #d4af37; margin-right: 0.5rem;"></i> {{ site_settings.get('about_bullet3', 'Immaculate Craftsmanship & Finishing') }}</li>
+                    <li><i class="fas fa-check" style="color: var(--accent-gold); margin-right: 0.5rem;"></i> {{ site_settings.get('about_bullet1', 'Bespoke Furniture & Material Curation') }}</li>
+                    <li><i class="fas fa-check" style="color: var(--accent-gold); margin-right: 0.5rem;"></i> {{ site_settings.get('about_bullet2', 'End-to-End Space Planning & Execution') }}</li>
+                    <li><i class="fas fa-check" style="color: var(--accent-gold); margin-right: 0.5rem;"></i> {{ site_settings.get('about_bullet3', 'Immaculate Craftsmanship & Finishing') }}</li>
                 </ul>
             </div>
         </div>
@@ -658,35 +662,35 @@
         <!-- Desktop-Only Founder Details (Placed spanning full width below the two columns) -->
         <div class="d-none d-lg-block mt-5" data-aos="fade-up">
             <div style="border-top: 1px solid rgba(15, 30, 60, 0.08); padding-top: 2rem;">
-                <h6 style="color: #0f1e3c; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
-                    <span><i class="fas fa-address-book" style="color: #d4af37; margin-right: 0.5rem;"></i> Direct Contact Details</span>
-                    <span style="font-family: 'Great Vibes', cursive; font-size: 1.4em; font-weight: 400; color: #d4af37; text-transform: lowercase; letter-spacing: 0; line-height: 1;">iconic<span style="font-family: 'Poppins', sans-serif; font-size: 0.55em; text-transform: uppercase; font-weight: 600; color: #0f1e3c; letter-spacing: 0.5px; margin-left: 1px;">.design</span></span>
+                <h6 style="color: var(--primary-dark); font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+                    <span><i class="fas fa-address-book" style="color: var(--accent-gold); margin-right: 0.5rem;"></i> Direct Contact Details</span>
+                    <span style="font-family: 'Great Vibes', cursive; font-size: 1.4em; font-weight: 400; color: var(--accent-gold); text-transform: lowercase; letter-spacing: 0; line-height: 1;">iconic<span style="font-family: 'Poppins', sans-serif; font-size: 0.55em; text-transform: uppercase; font-weight: 600; color: var(--primary-dark); letter-spacing: 0.5px; margin-left: 1px;">.design</span></span>
                 </h6>
                 <div class="row g-4">
                     <div class="col-lg-4" style="border-right: 1px solid rgba(0,0,0,0.06);">
                         <div class="d-flex align-items-center gap-3 px-3">
-                            <i class="fas fa-phone-alt" style="color: #d4af37; font-size: 1.1rem; width: 24px; text-align: center;"></i>
+                            <i class="fas fa-phone-alt" style="color: var(--accent-gold); font-size: 1.1rem; width: 24px; text-align: center;"></i>
                             <div>
-                                <span style="color: #64748b; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px; display: block; font-weight: 500;">Call / WhatsApp</span>
-                                <a href="tel:{{ site_settings.get('founder_phone', '+91 98116 85628') | replace(' ', '') }}" style="color: #0f1e3c; font-size: 1.05rem; font-weight: 700; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#d4af37'" onmouseout="this.style.color='#0f1e3c'">{{ site_settings.get('founder_phone', '+91 98116 85628') }}</a>
+                                <span style="color: var(--text-light); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px; display: block; font-weight: 500;">Call / WhatsApp</span>
+                                <a href="tel:{{ site_settings.get('founder_phone', '+91 98116 85628') | replace(' ', '') }}" style="color: var(--primary-dark); font-size: 1.05rem; font-weight: 700; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--accent-gold)'" onmouseout="this.style.color='var(--primary-dark)'">{{ site_settings.get('founder_phone', '+91 98116 85628') }}</a>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-4" style="border-right: 1px solid rgba(0,0,0,0.06);">
                         <div class="d-flex align-items-center gap-3 px-3">
-                            <i class="fas fa-envelope" style="color: #d4af37; font-size: 1.1rem; width: 24px; text-align: center;"></i>
+                            <i class="fas fa-envelope" style="color: var(--accent-gold); font-size: 1.1rem; width: 24px; text-align: center;"></i>
                             <div>
-                                <span style="color: #64748b; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px; display: block; font-weight: 500;">Founder's Desk</span>
-                                <a href="mailto:{{ site_settings.get('founder_email', 'shakirali1203@gmail.com') }}" style="color: #0f1e3c; font-size: 1.05rem; font-weight: 700; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#d4af37'" onmouseout="this.style.color='#0f1e3c'">{{ site_settings.get('founder_email', 'shakirali1203@gmail.com') }}</a>
+                                <span style="color: var(--text-light); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px; display: block; font-weight: 500;">Founder's Desk</span>
+                                <a href="mailto:{{ site_settings.get('founder_email', 'shakirali1203@gmail.com') }}" style="color: var(--primary-dark); font-size: 1.05rem; font-weight: 700; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--accent-gold)'" onmouseout="this.style.color='var(--primary-dark)'">{{ site_settings.get('founder_email', 'shakirali1203@gmail.com') }}</a>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-4">
                         <div class="d-flex align-items-center gap-3 px-3">
-                            <i class="fas fa-map-marker-alt" style="color: #d4af37; font-size: 1.1rem; width: 24px; text-align: center;"></i>
+                            <i class="fas fa-map-marker-alt" style="color: var(--accent-gold); font-size: 1.1rem; width: 24px; text-align: center;"></i>
                             <div>
-                                <span style="color: #64748b; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px; display: block; font-weight: 500;">Office Headquarters</span>
-                                <span style="color: #0f1e3c; font-size: 1.05rem; font-weight: 700; display: block;">{{ site_settings.get('founder_location', 'Sector 56, Gurgaon') }}</span>
+                                <span style="color: var(--text-light); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px; display: block; font-weight: 500;">Office Headquarters</span>
+                                <span style="color: var(--primary-dark); font-size: 1.05rem; font-weight: 700; display: block;">{{ site_settings.get('founder_location', 'Sector 56, Gurgaon') }}</span>
                             </div>
                         </div>
                     </div>
@@ -698,7 +702,7 @@
 
 <!-- ===== FEATURED PROJECTS SECTION ===== -->
 <!-- Homepage project showcase with pagination (9 projects per page) -->
-<section id="projects" style="background-color: #f8f9fa;">
+<section id="projects" style="background-color: var(--accent-light);">
     <div class="container">
         <h2>Featured <span class="gold-accent">Projects</span></h2>
         
@@ -804,7 +808,7 @@
 
 <!-- ===== TESTIMONIALS SECTION ===== -->
 <!-- Client feedback and success stories - managed via Admin Panel -->
-<section style="background-color: #f8f9fa;">
+<section style="background-color: var(--accent-light);">
     <div class="container">
         <h2>What Our Clients <span class="gold-accent">Say</span></h2>
         {% if testimonials %}
@@ -825,7 +829,7 @@
         </div>
         {% else %}
         <div class="text-center py-5">
-            <p style="color: #64748b; font-size: 1.1rem;">Client testimonials coming soon.</p>
+            <p style="color: var(--text-light); font-size: 1.1rem;">Client testimonials coming soon.</p>
         </div>
         {% endif %}
     </div>
@@ -836,11 +840,11 @@
 <section id="contact" class="cta-section">
     <div class="container">
         <h2>Ready to Start Your Project?</h2>
-        <p class="mb-4">Get in touch with the team at <span style="font-family: 'Great Vibes', cursive; font-size: 1.45em; font-weight: 400; color: #d4af37; text-transform: lowercase; display: inline-block; vertical-align: middle; line-height: 1; margin: 0 2px;">iconic<span style="font-family: 'Poppins', sans-serif; font-size: 0.55em; text-transform: uppercase; font-weight: 600; color: #fff; letter-spacing: 0.5px; margin-left: 1px;">.design</span></span> today to discuss your interior transformation needs.</p>
+        <p class="mb-4">Get in touch with the team at <span style="font-family: 'Great Vibes', cursive; font-size: 1.45em; font-weight: 400; color: var(--accent-gold); text-transform: lowercase; display: inline-block; vertical-align: middle; line-height: 1; margin: 0 2px;">iconic<span style="font-family: 'Poppins', sans-serif; font-size: 0.55em; text-transform: uppercase; font-weight: 600; color: var(--primary-dark); letter-spacing: 0.5px; margin-left: 1px;">.design</span></span> today to discuss your interior transformation needs.</p>
         <!-- Contact modal trigger button -->
         <div class="d-flex flex-column flex-md-row justify-content-center gap-3 mt-4">
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#contactModal">Send Inquiry</button>
-            <a href="tel:{{ site_settings.get('founder_phone', '+91 98116 85628') | replace(' ', '') }}" class="btn btn-outline-light">Call Us Now</a>
+            <a href="tel:{{ site_settings.get('founder_phone', '+91 98116 85628') | replace(' ', '') }}" class="btn" style="background: var(--primary-dark); color: #ffffff; font-weight: 600; padding: 0.8rem 2.5rem; text-transform: uppercase; letter-spacing: 1px; border-radius: 5px; border: none; transition: all 0.3s ease; box-shadow: 0 4px 14px rgba(26,25,23,0.18);" onmouseover="this.style.background='var(--surface-dark)'" onmouseout="this.style.background='var(--primary-dark)'">Call Us Now</a>
         </div>
     </div>
 </section>
@@ -850,7 +854,7 @@
 <div class="modal fade" id="contactModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header" style="background-color: #0f1e3c; color: white;">
+            <div class="modal-header" style="background-color: var(--primary-dark); color: white;">
                 <h5 class="modal-title">Send Your Inquiry</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
