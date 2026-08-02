@@ -6,6 +6,8 @@ Database: PostgreSQL via Supabase (psycopg2)
 """
 
 import os
+import io
+import requests as http_requests
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
@@ -24,7 +26,41 @@ from werkzeug.utils import secure_filename
 from PIL import Image
 
 
+# ---------------------------------------------------------------------------
+# Supabase Storage — persistent image uploads that survive every deploy
+# ---------------------------------------------------------------------------
+# These are read at module level so the helper functions can use them.
+_SUPABASE_PROJECT_URL = None  # filled in after app config is loaded
+_SUPABASE_SERVICE_KEY = None
+
+
+def _upload_to_supabase_storage(file_bytes: bytes, filename: str, content_type: str = 'image/webp') -> str | None:
+    """Upload raw bytes to the Supabase Storage 'uploads' bucket.
+    Returns the public CDN URL on success, None on failure.
+    """
+    if not _SUPABASE_PROJECT_URL or not _SUPABASE_SERVICE_KEY:
+        return None
+    url = f"{_SUPABASE_PROJECT_URL}/storage/v1/object/uploads/{filename}"
+    headers = {
+        'Authorization': f'Bearer {_SUPABASE_SERVICE_KEY}',
+        'Content-Type': content_type,
+        'x-upsert': 'true',  # overwrite if same name exists
+    }
+    try:
+        resp = http_requests.post(url, headers=headers, data=file_bytes, timeout=30)
+        if resp.status_code in (200, 201):
+            return f"{_SUPABASE_PROJECT_URL}/storage/v1/object/public/uploads/{filename}"
+        print(f"Supabase Storage upload failed [{resp.status_code}]: {resp.text}")
+    except Exception as e:
+        print(f"Supabase Storage upload error: {e}")
+    return None
+
+
 def process_and_save_image(file_obj, upload_folder, max_dim=2560):
+    """Process an uploaded image (resize, convert to WebP) and store it.
+    In production: uploads to Supabase Storage (permanent, survives deploys).
+    In development / fallback: saves to local upload_folder.
+    """
     if not file_obj or not file_obj.filename:
         return None
 
@@ -32,12 +68,21 @@ def process_and_save_image(file_obj, upload_folder, max_dim=2560):
     ext = filename.rsplit('.', 1)[1].lower() if '.' in filename else ''
     unique_filename = f"{uuid.uuid4().hex}"
 
+    # --- SVG: no pixel processing needed ---
     if ext == 'svg':
         final_filename = f"{unique_filename}.svg"
+        svg_bytes = file_obj.read()
+        # Try Supabase Storage first
+        storage_url = _upload_to_supabase_storage(svg_bytes, final_filename, 'image/svg+xml')
+        if storage_url:
+            return storage_url
+        # Fallback: local disk
         save_path = os.path.join(upload_folder, final_filename)
-        file_obj.save(save_path)
+        with open(save_path, 'wb') as f:
+            f.write(svg_bytes)
         return f"/static/uploads/{final_filename}"
 
+    # --- Raster images: resize + convert to WebP ---
     try:
         img = Image.open(file_obj)
         if img.mode in ('RGBA', 'P'):
@@ -54,18 +99,41 @@ def process_and_save_image(file_obj, upload_folder, max_dim=2560):
             img = img.resize((new_width, new_height), Image.Resampling.LANCZOS)
 
         final_filename = f"{unique_filename}.webp"
+        # Save to bytes buffer so we can upload to Supabase without touching disk
+        buf = io.BytesIO()
+        img.save(buf, 'WEBP', quality=90)
+        buf.seek(0)
+        img_bytes = buf.read()
+
+        # Try Supabase Storage first (persistent)
+        storage_url = _upload_to_supabase_storage(img_bytes, final_filename, 'image/webp')
+        if storage_url:
+            return storage_url
+
+        # Fallback: local disk
         save_path = os.path.join(upload_folder, final_filename)
-        img.save(save_path, 'WEBP', quality=90)
+        with open(save_path, 'wb') as f:
+            f.write(img_bytes)
         return f"/static/uploads/{final_filename}"
+
     except Exception as e:
         print(f"Image processing failed: {e}")
-        save_path = os.path.join(upload_folder, filename)
         file_obj.seek(0)
-        file_obj.save(save_path)
+        raw_bytes = file_obj.read()
+        storage_url = _upload_to_supabase_storage(raw_bytes, filename, 'application/octet-stream')
+        if storage_url:
+            return storage_url
+        save_path = os.path.join(upload_folder, filename)
+        with open(save_path, 'wb') as f:
+            f.write(raw_bytes)
         return f"/static/uploads/{filename}"
 
 
 def process_and_crop_image(file_obj, upload_folder, aspect_ratio=(4, 5), target_width=800):
+    """Crop and resize an uploaded image to a fixed aspect ratio, then store it.
+    In production: uploads to Supabase Storage (permanent, survives deploys).
+    In development / fallback: saves to local upload_folder.
+    """
     if not file_obj or not file_obj.filename:
         return None
 
@@ -82,12 +150,10 @@ def process_and_crop_image(file_obj, upload_folder, aspect_ratio=(4, 5), target_
         img_aspect = width / height
 
         if img_aspect > target_aspect:
-            # Image is too wide -> crop left and right
             new_width = int(height * target_aspect)
             offset = (width - new_width) // 2
             img = img.crop((offset, 0, offset + new_width, height))
         else:
-            # Image is too tall -> crop top and bottom (bias vertical crop slightly towards top)
             new_height = int(width / target_aspect)
             offset = int((height - new_height) * 0.35)
             img = img.crop((0, offset, width, offset + new_height))
@@ -96,14 +162,32 @@ def process_and_crop_image(file_obj, upload_folder, aspect_ratio=(4, 5), target_
         img = img.resize((target_width, target_height), Image.Resampling.LANCZOS)
 
         final_filename = f"{unique_filename}.webp"
+        buf = io.BytesIO()
+        img.save(buf, 'WEBP', quality=90)
+        buf.seek(0)
+        img_bytes = buf.read()
+
+        # Try Supabase Storage first (persistent)
+        storage_url = _upload_to_supabase_storage(img_bytes, final_filename, 'image/webp')
+        if storage_url:
+            return storage_url
+
+        # Fallback: local disk
         save_path = os.path.join(upload_folder, final_filename)
-        img.save(save_path, 'WEBP', quality=90)
+        with open(save_path, 'wb') as f:
+            f.write(img_bytes)
         return f"/static/uploads/{final_filename}"
+
     except Exception as e:
         print(f"Image cropping and processing failed: {e}")
-        save_path = os.path.join(upload_folder, filename)
         file_obj.seek(0)
-        file_obj.save(save_path)
+        raw_bytes = file_obj.read()
+        storage_url = _upload_to_supabase_storage(raw_bytes, filename, 'application/octet-stream')
+        if storage_url:
+            return storage_url
+        save_path = os.path.join(upload_folder, filename)
+        with open(save_path, 'wb') as f:
+            f.write(raw_bytes)
         return f"/static/uploads/{filename}"
 
 
@@ -126,11 +210,19 @@ cache.init_app(app)
 # --- CONFIGURATION ---
 PROJECTS_PER_PAGE = 9
 # DATABASE_URL env var: set this to your Supabase PostgreSQL connection string in production.
-DATABASE_URL = os.environ.get('DATABASE_URL', '').strip()  # .strip() prevents hidden newlines/spaces breaking the connection
+DATABASE_URL = os.environ.get('DATABASE_URL', '').strip()
 UPLOAD_FOLDER = os.path.join('static', 'uploads')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-# Ensure upload directory exists
+# Supabase Storage — wire up the module-level variables used by the upload helpers
+# SUPABASE_URL  : your project URL e.g. https://ntcpvzvgfimytgdcionx.supabase.co
+# SUPABASE_SERVICE_KEY : service_role key from Settings > API Keys (NOT the anon key)
+import sys as _sys
+_this = _sys.modules[__name__]
+_this._SUPABASE_PROJECT_URL = os.environ.get('SUPABASE_URL', '').strip()
+_this._SUPABASE_SERVICE_KEY = os.environ.get('SUPABASE_SERVICE_KEY', '').strip()
+
+# Ensure local upload directory exists (used as fallback in dev)
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 
