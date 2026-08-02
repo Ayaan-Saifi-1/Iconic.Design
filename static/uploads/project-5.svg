@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <defs>
+    <linearGradient id="g5" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1d3557" />
+      <stop offset="100%" stop-color="#457b9d" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" rx="32" fill="url(#g5)" />
+  <circle cx="890" cy="230" r="130" fill="rgba(255,255,255,0.12)" />
+  <rect x="90" y="520" width="440" height="190" rx="26" fill="rgba(255,255,255,0.16)" />
+  <text x="100" y="390" fill="#f8fafc" font-family="Poppins, sans-serif" font-size="68" font-weight="700">BuildCorp</text>
+  <text x="100" y="470" fill="#e2e8f0" font-family="Poppins, sans-serif" font-size="34" font-weight="500">Project 5</text>
+</svg>

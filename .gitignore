@@ -7,8 +7,21 @@
 *.sqlite
 *.sqlite3
 
-# --- Uploaded media (managed on server, not in repo) ---
-static/uploads/*
+# --- Uploaded media ---
+# Essential static assets ARE committed (hero, logos, placeholder SVGs)
+# Only ignore future user-uploaded files added via admin panel
+static/uploads/*.webp
+!static/uploads/hero_bg.png
+!static/uploads/hero_bg_landscape.png
+!static/uploads/hero_bg.jpg
+!static/uploads/shakir_ali.png
+!static/uploads/logo.png
+!static/uploads/logo-icon.png
+!static/uploads/logo-icon-transparent.png
+!static/uploads/logo_icon.png
+!static/uploads/client-photo.png
+!static/uploads/image.png
+!static/uploads/*.svg
 !static/uploads/.gitkeep
 
 # --- Environment & secrets ---

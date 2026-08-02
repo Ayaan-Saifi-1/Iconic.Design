@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <defs>
+    <linearGradient id="g8" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1f2937" />
+      <stop offset="100%" stop-color="#475569" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" rx="32" fill="url(#g8)" />
+  <circle cx="900" cy="230" r="115" fill="rgba(255,255,255,0.12)" />
+  <rect x="90" y="530" width="450" height="185" rx="26" fill="rgba(255,255,255,0.16)" />
+  <text x="100" y="390" fill="#f8fafc" font-family="Poppins, sans-serif" font-size="68" font-weight="700">BuildCorp</text>
+  <text x="100" y="470" fill="#e2e8f0" font-family="Poppins, sans-serif" font-size="34" font-weight="500">Project 8</text>
+</svg>
