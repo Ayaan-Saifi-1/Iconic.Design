@@ -26,7 +26,7 @@ The current theme uses these colors (for your reference):
 
 Please provide the **new** colors you want, with exact hex codes if possible. If you don't have hex codes, describe the color and we will match it.
 
-| Role | Your New Color | Hex Code (if known) |
+| Role | Your New Color | Hex Code (if known)
 |---|---|---|
 | **Primary / Navbar background** | | |
 | **Main accent / Buttons / Highlights** | | |
