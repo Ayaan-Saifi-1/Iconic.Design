@@ -392,66 +392,8 @@ def init_db():
     cursor.execute('CREATE INDEX IF NOT EXISTS idx_projects_status ON projects(status)')
     cursor.execute('CREATE INDEX IF NOT EXISTS idx_leads_created ON leads(created_at DESC)')
 
-    # Check if empty, then seed with dummy data only in development
-    cursor.execute('SELECT COUNT(*) FROM projects')
-    project_count = cursor.fetchone()['count']
-    if project_count == 0:
-        if os.environ.get('FLASK_ENV') != 'production':
-            print("Development environment detected. Database is empty. Seeding with initial data...")
-            seed_db(cursor)
-        else:
-            print("Production environment detected. Database initialized as empty.")
-
     conn.commit()
     conn.close()
-
-
-def seed_db(cursor):
-    project_types = ["Modern Living Room", "Luxury Villa Interiors", "Bespoke Bedroom Suite", "Contemporary Dining Area", "Custom Interior Styling"]
-    locations = ["Mumbai", "Delhi", "Bangalore", "Hyderabad", "Pune"]
-    descriptions = ["A stunning {type} designed with premium materials, spatial harmony, and seamless aesthetics."]
-
-    default_scope = "Comprehensive space planning and layout\nBespoke furniture selection and sourcing\nCustom lighting design and ambiance\nPremium material finishes and texturing\nArt curation and styling\nComplete installation and staging"
-    default_achievements = "Premium Quality Materials\nSpatial Excellence\nBespoke Furniture Solutions\nImmaculate Styling"
-    default_extended = "This iconic space was crafted to merge luxury with breathtaking design. Every element, from the bespoke furniture to the lighting, was carefully curated to create a truly magnificent environment."
-
-    for i in range(1, 101):
-        ptype = project_types[i % len(project_types)]
-        loc = locations[i % len(locations)]
-        days_ago = (i * 11) % 1095
-        pdate = (datetime.now() - timedelta(days=days_ago)).strftime("%Y-%m-%d")
-        cover_image = f"/static/uploads/project-{(i % 12) + 1}.svg"
-
-        cursor.execute('''
-            INSERT INTO projects (title, location, date, description, status, budget, team_size, duration, cover_image, scope_of_work, achievements, extended_description, scope_heading, achievements_heading, achievements_subheading)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-            RETURNING id
-        ''', (
-            f"{ptype} - Phase {(i % 5) + 1}",
-            loc,
-            pdate,
-            descriptions[0].format(type=ptype),
-            ["Completed", "In Progress", "Planning"][i % 3],
-            f"₹1{(i % 50 + 1)} Crores",
-            f"{30 + (i % 50)} Professionals",
-            f"{6 + (i % 20)} Months",
-            cover_image,
-            default_scope,
-            default_achievements,
-            default_extended,
-            'Scope of Work',
-            'Achievements & Certifications',
-            'This project received recognition for:'
-        ))
-        project_id = cursor.fetchone()['id']
-
-        # Add gallery images (including cover image as first)
-        cursor.execute('INSERT INTO project_images (project_id, image_path) VALUES (%s, %s)', (project_id, cover_image))
-        for j in range(5):
-            cursor.execute(
-                'INSERT INTO project_images (project_id, image_path) VALUES (%s, %s)',
-                (project_id, f"/static/uploads/gallery-{(j % 4) + 1}.svg")
-            )
 
 
 init_db()
