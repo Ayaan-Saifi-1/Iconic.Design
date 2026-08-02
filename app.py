@@ -126,7 +126,7 @@ cache.init_app(app)
 # --- CONFIGURATION ---
 PROJECTS_PER_PAGE = 9
 # DATABASE_URL env var: set this to your Supabase PostgreSQL connection string in production.
-DATABASE_URL = os.environ.get('DATABASE_URL')
+DATABASE_URL = os.environ.get('DATABASE_URL', '').strip()  # .strip() prevents hidden newlines/spaces breaking the connection
 UPLOAD_FOLDER = os.path.join('static', 'uploads')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
