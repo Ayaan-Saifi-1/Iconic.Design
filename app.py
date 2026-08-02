@@ -500,7 +500,7 @@ def project_detail(project_id):
 
     if project is None:
         conn.close()
-        return "Project not found", 404
+        return render_template('404.html'), 404
 
     cursor.execute('SELECT * FROM project_images WHERE project_id = %s', (project_id,))
     gallery_images = cursor.fetchall()
@@ -700,6 +700,20 @@ def admin_leads():
     cursor.execute('SELECT * FROM leads ORDER BY created_at DESC LIMIT %s OFFSET %s', (LEADS_PER_PAGE, offset))
     leads = cursor.fetchall()
     conn.close()
+
+    for lead in leads:
+        created = lead.get('created_at')
+        if created:
+            if hasattr(created, 'strftime'):
+                lead['date_str'] = created.strftime('%Y-%m-%d')
+                lead['time_str'] = created.strftime('%H:%M')
+            else:
+                parts = str(created).split(' ')
+                lead['date_str'] = parts[0] if len(parts) > 0 else 'Unknown'
+                lead['time_str'] = parts[1][:5] if len(parts) > 1 else ''
+        else:
+            lead['date_str'] = 'Unknown'
+            lead['time_str'] = ''
 
     return render_template('admin_leads.html', leads=leads, current_page=page, total_pages=total_pages, total_leads=total_leads)
 

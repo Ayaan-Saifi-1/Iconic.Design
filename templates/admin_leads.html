@@ -1,4 +1,4 @@
-﻿{% extends "base.html" %}
+{% extends "base.html" %}
 
 {% block content %}
 
@@ -69,8 +69,8 @@
                         {% for lead in leads %}
                         <tr>
                             <td class="ps-4" style="font-size: 0.9rem; color: var(--text-light);">
-                                {{ lead.created_at.split(' ')[0] if lead.created_at else 'Unknown' }}<br>
-                                <small>{{ lead.created_at.split(' ')[1][:5] if lead.created_at and ' ' in lead.created_at else '' }}</small>
+                                {{ lead.date_str or 'Unknown' }}<br>
+                                <small>{{ lead.time_str or '' }}</small>
                             </td>
                             <td class="fw-bold" style="color: var(--primary-dark);">{{ lead.name }}</td>
                             <td>
